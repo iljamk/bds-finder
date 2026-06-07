@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)file:///C:/Users/misch/Downloads/BDS_Disziplinen_Finder_12.html -->
+<html lang="de"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDS Präzisions-Disziplinen-Finder</title>
+<style>
+:root{
+  --bg:#f5f4f0;--surface:#fff;--surface2:#f0ede8;
+  --border:rgba(0,0,0,.10);--border2:rgba(0,0,0,.18);
+  --text:#1a1a18;--text2:#5a5955;--text3:#8a8880;
+  --purple-bg:#EEEDFE;--purple-fg:#3C3489;
+  --teal-bg:#E1F5EE;--teal-fg:#085041;
+  --teal2-bg:#9FE1CB;--teal2-fg:#04342C;
+  --amber-bg:#FAEEDA;--amber-fg:#633806;
+  --blue-bg:#E6F1FB;--blue-fg:#0C447C;
+  --red-bg:#FCEBEB;--red-fg:#A32D2D;
+  --green-bg:#EAF3DE;--green-fg:#3B6D11;
+  --r:10px;--rs:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Georgia',serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem}
+.page{max-width:920px;margin:0 auto}
+header{margin-bottom:2rem;border-bottom:2px solid var(--text);padding-bottom:1rem}
+header h1{font-size:1.75rem;font-weight:normal;letter-spacing:-.02em;line-height:1.2}
+header p{margin-top:.4rem;font-size:.78rem;color:var(--text2);font-family:'Courier New',monospace}
+.filters{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:1.25rem;margin-bottom:1.5rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:.875rem}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg.full{grid-column:1/-1}
+.fg.half2{grid-column:span 2}
+.fg label{font-size:.67rem;font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--text2)}
+select{appearance:none;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rs);padding:.45rem 2rem .45rem .7rem;font-size:.845rem;font-family:'Georgia',serif;color:var(--text);cursor:pointer;width:100%;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a5955' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .7rem center}
+select:focus{outline:2px solid var(--purple-fg);outline-offset:1px}
+.hint{font-size:.68rem;font-family:'Courier New',monospace;color:var(--text3);margin-top:2px;min-height:1em}
+.count{font-size:.72rem;font-family:'Courier New',monospace;color:var(--text3);margin-bottom:.75rem;padding-left:2px}
+.results{display:flex;flex-direction:column;gap:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.125rem;transition:border-color .15s}
+.card:hover{border-color:var(--border2)}
+.card-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:.55rem}
+.kz{background:var(--purple-bg);color:var(--purple-fg);font-size:.7rem;font-weight:bold;font-family:'Courier New',monospace;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.art-badge{font-size:.67rem;font-family:'Courier New',monospace;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.lw25{background:var(--teal2-bg);color:var(--teal2-fg)}
+.lw50{background:var(--teal-bg);color:var(--teal-fg)}
+.kw{background:var(--amber-bg);color:var(--amber-fg)}
+.dname{font-size:.93rem;font-weight:bold;color:var(--text)}
+.scheibe-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:.55rem}
+.scheibe-tag{background:var(--blue-bg);color:var(--blue-fg);font-size:.73rem;font-family:'Courier New',monospace;padding:2px 8px;border-radius:4px}
+.warn-tag{background:var(--red-bg);color:var(--red-fg);font-size:.7rem;font-family:'Courier New',monospace;padding:2px 8px;border-radius:4px}
+.prop-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:.55rem}
+.prop{font-size:.68rem;font-family:'Courier New',monospace;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.prop-offen{background:#F1EFE8;color:#444441;border:1px solid #D3D1C7}
+.prop-opt{background:var(--blue-bg);color:var(--blue-fg)}
+.prop-beliebig{background:var(--purple-bg);color:var(--purple-fg)}
+.prop-komp-ja{background:var(--green-bg);color:var(--green-fg)}
+.prop-komp-nein{background:var(--red-bg);color:var(--red-fg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:6px;padding-top:.55rem;border-top:1px solid var(--border)}
+.di .dl{font-size:.62rem;font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:2px}
+.di .dv{font-size:.78rem;color:var(--text)}
+.note{margin-top:.55rem;padding-top:.45rem;border-top:1px solid var(--border);font-size:.72rem;color:var(--text2);font-family:'Courier New',monospace;line-height:1.55}
+.kaliber-tags{margin-top:.5rem;padding-top:.45rem;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.kal-label{font-size:.62rem;font-family:'Courier New',monospace;color:var(--text3);margin-right:4px}
+.kal-tag{background:var(--surface2);border:1px solid var(--border2);color:var(--text2);font-size:.63rem;font-family:'Courier New',monospace;padding:1px 6px;border-radius:3px}
+.empty{text-align:center;color:var(--text3);padding:2rem 0;font-size:.9rem}
+
+  .scheiben-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:.55rem;padding-top:.5rem;border-top:1px solid var(--border)}
+  .scheibe-btn{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rs);padding:3px 8px 3px 4px;cursor:pointer;font-size:.72rem;font-family:"Courier New",monospace;color:var(--text2);transition:border-color .15s}
+  .scheibe-btn:hover{border-color:var(--purple-fg);color:var(--purple-fg)}
+  .scheibe-mini{display:inline-block;vertical-align:middle}
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center}
+  .modal-overlay.open{display:flex}
+  .modal-box{background:var(--surface);border-radius:var(--r);padding:1.5rem;max-width:480px;width:90%;position:relative}
+  .modal-close{position:absolute;top:.75rem;right:.75rem;background:none;border:none;font-size:1.25rem;cursor:pointer;color:var(--text2);line-height:1}
+  .modal-close:hover{color:var(--text)}
+  .modal-title{font-size:1rem;font-weight:500;margin-bottom:.25rem}
+  .modal-sub{font-size:.75rem;font-family:"Courier New",monospace;color:var(--text2);margin-bottom:1rem}
+  .modal-svg{display:block;margin:0 auto 1rem}
+  .modal-note{font-size:.73rem;font-family:"Courier New",monospace;color:var(--text2);line-height:1.5}
+
+footer{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--border);font-size:.67rem;font-family:'Courier New',monospace;color:var(--text3);line-height:1.65}
+@media(max-width:620px){.filters{grid-template-columns:1fr 1fr}.fg.half2{grid-column:1/-1}header h1{font-size:1.3rem}}
+@media(max-width:400px){.filters{grid-template-columns:1fr}.fg.full,.fg.half2{grid-column:1}}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
+    <img src="data:image/jpeg;base64,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" alt="Sportschützen Schöpplenberg e.V." style="height:72px;width:auto;border-radius:6px;flex-shrink:0">
+    <div>
+      <h1>BDS Präzisions-Disziplinen-Finder</h1>
+      <p style="margin-top:.25rem">Sportschützen Schöpplenberg e.V. — Büchse 25 m · Langwaffe 50 m · Kurzwaffe 25 m — Stand Sporthandbuch 2025/2026 · Version 1.5.2</p>
+    </div>
+  </div>
+</header>
+
+<div class="filters">
+  <div class="fg">
+    <label>Waffenart</label>
+    <select id="s-art">
+      <option value="">Alle</option>
+      <option value="lw25">Büchse 25 m (20xx)</option>
+      <option value="lw50">Langwaffe 50 m (21xx nativ / 3xxx auf 50 m verkürzt)</option>
+      <option value="kw">Kurzwaffe 25 m</option>
+    </select>
+  </div>
+  <div class="fg">
+    <label>Kaliber</label>
+    <select id="s-kal"><option value="">Alle Kaliber</option><option value="kal_308">.308 Win / 7,62×51</option><option value="kal_3006">30-06 Springfield</option><option value="kal_303">.303 British</option><option value="kal_8x57">8×57 IS / 8 mm Mauser</option><option value="kal_762x54">7,62×54R</option><option value="kal_223">.223 Rem / 5,56×45</option><option value="kal_243">.243 Win</option><option value="kal_65creed">6,5 Creedmoor</option><option value="kal_65x55">6,5×55 SE</option><option value="kal_7x57">7×57 / 7 mm Mauser</option><option value="kal_7x64">7×64</option><option value="kal_300wm">.300 Win Mag</option><option value="kal_762x39">7,62×39</option><option value="kal_22lfb">.22 lfB (Kleinkaliber)</option><option value="kal_9mm">9 mm</option><option value="kal_30carb">.30 Carbine</option><option value="kal_357sig">.357 SIG</option><option value="kal_40sw">.40 S&amp;W</option><option value="kal_45acp">.45 ACP</option><option value="kal_45lc">.45 Colt (LC)</option><option value="kal_44sp">.44 Special</option><option value="kal_44mag">.44 Magnum</option><option value="kal_41mag">.41 Magnum</option><option value="kal_357mag">.357 Magnum</option><option value="kal_38sp">.38 Special</option><option value="kal_32sw">.32 S&amp;W long</option><option value="kal_22pist">.22 lfB (Pistole/Revolver)</option><option value="kal_kw_30p">mind. .30/7,62 mm (Kurzwaffe)</option></select>
+    <span class="hint" id="kal-hint"></span>
+  </div>
+  <div class="fg">
+    <label>Visierung</label>
+    <select id="s-vis">
+      <option value="">Alle</option>
+      <option value="offen">Offen (Kimme &amp; Korn)</option>
+      <option value="opt">Optisch (ZF / Red Dot)</option>
+      <option value="beliebig">Beliebig</option>
+    </select>
+  </div>
+  <div class="fg">
+    <label>Kompensator / Mündungsbremse verbaut?</label>
+    <select id="s-komp">
+      <option value="">Alle Disziplinen</option>
+      <option value="ja">Ja – nur Disziplinen anzeigen, die ihn erlauben</option>
+    </select>
+  </div>
+  <div class="fg half2">
+    <label>Waffentyp</label>
+    <select id="s-typ"><option value="">Alle Typen</option><optgroup label="Büchse 25 m"><option value="lw25_sl_kw_offen">SG SL KW – offen</option><option value="lw25_sl_kw_opt">SG SL KW – optisch</option><option value="lw25_sl_kk_opt">SG SL KK – optisch</option><option value="lw25_sl_kk_offen">SG SL KK – offen</option><option value="lw25_la_kw_offen">LA KW – offen</option><option value="lw25_la_kw_opt">LA KW – optisch</option><option value="lw25_la_kk_offen">LA KK – offen</option><option value="lw25_la_kk_opt">LA KK – optisch</option></optgroup><optgroup label="Langwaffe 50 m"><option value="lw50_ord">.308/.303/30-06/8×57/7,62×54</option><option value="lw50_kk">KK .22 lfB</option><option value="lw50_bis7">GK bis 7 mm</option><option value="lw50_ue7">GK über 7 mm</option><option value="lw50_sl_kw">SG SL KW 50 m</option><option value="lw50_la_kw">LA KW 50 m</option><option value="lw50_la_kk">LA KK 50 m</option><option value="lw50_la_gk">Lever Action GK (6,5–11,63 mm)</option><option value="lw50_dsg">Dienstsportgewehr (DSG)</option></optgroup><optgroup label="Kurzwaffe 25 m"><option value="kw_p9">Pistole bis 9 mm</option><option value="kw_pue9">Pistole über 9 mm</option><option value="kw_pmag357">Pistole Mag. bis .357</option><option value="kw_pmague357">Pistole Mag. über .357</option><option value="kw_r38">Revolver bis .38</option><option value="kw_rue38">Revolver über .38</option><option value="kw_rmag357">Revolver Mag. bis .357</option><option value="kw_rmague357">Revolver Mag. über .357</option><option value="kw_fk22_offen">FK .22 – offen</option><option value="kw_fk22_opt">FK .22 – optisch</option><option value="kw_fk22_32">FK .32 S&amp;W long</option><option value="kw_fk30">FK mind. .30/7,62 mm</option><option value="kw_dsp">Dienst-Sportpistole/-revolver</option></optgroup></select>
+  </div>
+</div>
+
+<div class="count" id="cnt">46 Disziplinen gefunden</div>
+<div class="results" id="res"><div class="card">
+      <div class="card-top">
+        <span class="kz">2001</span><span class="art-badge lw25">Büchse 25 m</span>
+        <span class="dname">SG Selbstlader KW, offene Vis. (SG SL KW off.Vis.)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-Kurzwaffenscheibe (25 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">6,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber: alle Zentralfeuerkurzwaffenpatronen (9 mm, .357 SIG, .40 S&amp;W, .45 ACP …). 2×10 Schuss in 2×5 Min.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z21&#39;)">${scheibeMiniSVG(zid)} BDS-25m-Präzisionsscheibe / Büchse (Z21)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">9 mm</span><span class="kal-tag">.30 Carbine</span><span class="kal-tag">.357 SIG</span><span class="kal-tag">.40 S&amp;W</span><span class="kal-tag">.45 ACP</span><span class="kal-tag">.357 Magnum</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2002</span><span class="art-badge lw25">Büchse 25 m</span>
+        <span class="dname">SG Selbstlader KK, optische Vis. (SG SL KK opt.Vis.)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-Kurzwaffenscheibe (25 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB. Beliebige Optik (ZF, Red Dot …).</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z21&#39;)">${scheibeMiniSVG(zid)} BDS-25m-Präzisionsscheibe / Büchse (Z21)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2003</span><span class="art-badge lw25">Büchse 25 m</span>
+        <span class="dname">Lever Action KW, offene Vis. (LA KW off.Vis.)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-Kurzwaffenscheibe (25 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber: Kurzwaffenpatronen (z.B. .357 Mag, .44 Sp, .45 ACP …). Speedloader unzulässig.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z21&#39;)">${scheibeMiniSVG(zid)} BDS-25m-Präzisionsscheibe / Büchse (Z21)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">9 mm</span><span class="kal-tag">.357 SIG</span><span class="kal-tag">.40 S&amp;W</span><span class="kal-tag">.45 ACP</span><span class="kal-tag">.45 Colt (LC)</span><span class="kal-tag">.44 Special</span><span class="kal-tag">.44 Magnum</span><span class="kal-tag">.41 Magnum</span><span class="kal-tag">.357 Magnum</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2004</span><span class="art-badge lw25">Büchse 25 m</span>
+        <span class="dname">Repetierbüchse KK, offene Vis. (RB KK off.Vis.)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-Kurzwaffenscheibe (25 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">4,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z21&#39;)">${scheibeMiniSVG(zid)} BDS-25m-Präzisionsscheibe / Büchse (Z21)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2010</span><span class="art-badge lw25">Büchse 25 m</span>
+        <span class="dname">SG Selbstlader KW, optische Vis. (SG SL KW opt.Vis.)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-Kurzwaffenscheibe (25 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">6,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber: alle Zentralfeuerkurzwaffenpatronen. Beliebige Optik (ZF, Red Dot …).</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z21&#39;)">${scheibeMiniSVG(zid)} BDS-25m-Präzisionsscheibe / Büchse (Z21)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">9 mm</span><span class="kal-tag">.30 Carbine</span><span class="kal-tag">.357 SIG</span><span class="kal-tag">.40 S&amp;W</span><span class="kal-tag">.45 ACP</span><span class="kal-tag">.357 Magnum</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2011</span><span class="art-badge lw25">Büchse 25 m</span>
+        <span class="dname">Lever Action KW, optische Vis. (LA KW opt.Vis.)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-Kurzwaffenscheibe (25 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Unterhebelrepetierer, Kurzwaffenpatrone.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z21&#39;)">${scheibeMiniSVG(zid)} BDS-25m-Präzisionsscheibe / Büchse (Z21)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">9 mm</span><span class="kal-tag">.357 SIG</span><span class="kal-tag">.40 S&amp;W</span><span class="kal-tag">.45 ACP</span><span class="kal-tag">.45 Colt (LC)</span><span class="kal-tag">.44 Special</span><span class="kal-tag">.44 Magnum</span><span class="kal-tag">.41 Magnum</span><span class="kal-tag">.357 Magnum</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2012</span><span class="art-badge lw25">Büchse 25 m</span>
+        <span class="dname">SG Selbstlader KK, offene Vis. (SG SL KK off.Vis.)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-Kurzwaffenscheibe (25 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z21&#39;)">${scheibeMiniSVG(zid)} BDS-25m-Präzisionsscheibe / Büchse (Z21)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2014</span><span class="art-badge lw25">Büchse 25 m</span>
+        <span class="dname">Repetierbüchse KK, optische Vis. (RB KK opt.Vis.)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-Kurzwaffenscheibe (25 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z21&#39;)">${scheibeMiniSVG(zid)} BDS-25m-Präzisionsscheibe / Büchse (Z21)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2101</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">SG Selbstlader KW (SG SL KW) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">100-m-BDS-Scheibe (Regelscheibe 50 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">6,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber: alle Zentralfeuerkurzwaffenpatronen. Kompensator bei Präzision erlaubt (L.2.04).</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z1&#39;)">${scheibeMiniSVG(zid)} BDS-100m-Scheibe (Z1)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">9 mm</span><span class="kal-tag">.30 Carbine</span><span class="kal-tag">.357 SIG</span><span class="kal-tag">.40 S&amp;W</span><span class="kal-tag">.45 ACP</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2102</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">SG Selbstlader KK (SG SL KK) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-BDS-ZF-Scheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB. Kompensator bei Präzision erlaubt.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z2&#39;)">${scheibeMiniSVG(zid)} BDS-50m-ZF-Scheibe (Z2)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2103</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Lever Action KW (LA KW) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">100-m-BDS-Scheibe (Regelscheibe 50 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Unterhebelrepetierer, Kurzwaffenpatrone. Originalschaft.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z1&#39;)">${scheibeMiniSVG(zid)} BDS-100m-Scheibe (Z1)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">9 mm</span><span class="kal-tag">.357 SIG</span><span class="kal-tag">.40 S&amp;W</span><span class="kal-tag">.45 ACP</span><span class="kal-tag">.45 Colt (LC)</span><span class="kal-tag">.44 Special</span><span class="kal-tag">.44 Magnum</span><span class="kal-tag">.41 Magnum</span><span class="kal-tag">.357 Magnum</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2104</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Repetierbüchse KK, offene Vis. (RB KK off.Vis.) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">100-m-BDS-Scheibe (Regelscheibe 50 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">4,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z1&#39;)">${scheibeMiniSVG(zid)} BDS-100m-Scheibe (Z1)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2105</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Dienstsportgewehr KK offene Kimme (DSG KK) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">100-m-BDS-Scheibe (Regelscheibe 50 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Trageriemen</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB. Repetier- oder Selbstladegewehr im Originalzustand, offene Kimme und Korn.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z1&#39;)">${scheibeMiniSVG(zid)} BDS-100m-Scheibe (Z1)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2106</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Dienstsportgewehr KK Diopter (DSG D KK) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-ISSF-Scheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Trageriemen</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB. Originalwaffe mit geschlossener Visierung oder beliebigem Diopter.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z3&#39;)">${scheibeMiniSVG(zid)} ISSF-50m-Scheibe (Z3)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2107</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Matchsportgewehr KK (MSG KK) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-ISSF-Scheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">8,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">ISSF-Freigewehr</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Schießriemen</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB. Diopter max. 1,5-fache Optik – gilt hier als 'offen' i.S. BDS.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z3&#39;)">${scheibeMiniSVG(zid)} ISSF-50m-Scheibe (Z3)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2108</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Präzisionssportgewehr KK (PSG KK) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-BDS-ZF-Scheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">9,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">ISSF-Freigewehr</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Schießriemen</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB. Beliebige Visierung inkl. ZF.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z2&#39;)">${scheibeMiniSVG(zid)} BDS-50m-ZF-Scheibe (Z2)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2109</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Freie Klasse KK (FK KK) 50 m – .22 WMR / .17 HMR</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-BDS-ZF-Scheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Trageriemen</div></div>
+      </div>
+      <div class="note">Kaliber NUR .22 WMR oder .17 HMR (nicht .22 lfB). Keine Selbstlader.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z1&#39;)">${scheibeMiniSVG(zid)} BDS-100m-Scheibe (Z1)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 WMR / .22 Magnum</span><span class="kal-tag">.17 HMR</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2110</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">SG Selbstlader KW, optische Vis. (SG SL KW opt.Vis.) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">100-m-BDS-Scheibe (Regelscheibe 50 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">6,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber: alle Zentralfeuerkurzwaffenpatronen. Beliebige Optik.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z1&#39;)">${scheibeMiniSVG(zid)} BDS-100m-Scheibe (Z1)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">9 mm</span><span class="kal-tag">.30 Carbine</span><span class="kal-tag">.357 SIG</span><span class="kal-tag">.40 S&amp;W</span><span class="kal-tag">.45 ACP</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2111</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Lever Action KW, optische Vis. (LA KW opt.Vis.) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">100-m-BDS-Scheibe (Regelscheibe 50 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Unterhebelrepetierer, Kurzwaffenpatrone, optische Visierung.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z1&#39;)">${scheibeMiniSVG(zid)} BDS-100m-Scheibe (Z1)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">9 mm</span><span class="kal-tag">.357 SIG</span><span class="kal-tag">.40 S&amp;W</span><span class="kal-tag">.45 ACP</span><span class="kal-tag">.45 Colt (LC)</span><span class="kal-tag">.44 Special</span><span class="kal-tag">.44 Magnum</span><span class="kal-tag">.41 Magnum</span><span class="kal-tag">.357 Magnum</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2112</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">SG Selbstlader KK, offene Vis. (SG SL KK off.Vis.) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">100-m-BDS-Scheibe (Regelscheibe 50 m)</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB. Offene oder geschlossene Visierung.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z1&#39;)">${scheibeMiniSVG(zid)} BDS-100m-Scheibe (Z1)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2113</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Zielfernrohrgewehr KK (ZG 50 KK) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-BDS-ZF-Scheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend aufgelegt</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">6,5 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB. Beliebige Optik, Zweibein erlaubt.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z18&#39;)">${scheibeMiniSVG(zid)} BDS-PG-Scheibe (Z18)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2114</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Repetierbüchse KK, optische Vis. (RB KK opt.Vis.) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-BDS-ZF-Scheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Trageriemen</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB. Repetierer (auch Lever Action), optische Visierung.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z1&#39;)">${scheibeMiniSVG(zid)} BDS-100m-Scheibe (Z1)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2115</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Zielfernrohrgewehr KW (ZG 50 KW) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-BDS-ZF-Scheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend aufgelegt</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">6,5 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber: alle Kurzwaffenpatronen. Optik bis 12×, Zweibein erlaubt.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z2&#39;)">${scheibeMiniSVG(zid)} BDS-50m-ZF-Scheibe (Z2)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">9 mm</span><span class="kal-tag">.30 Carbine</span><span class="kal-tag">.357 SIG</span><span class="kal-tag">.40 S&amp;W</span><span class="kal-tag">.45 ACP</span><span class="kal-tag">.45 Colt (LC)</span><span class="kal-tag">.44 Special</span><span class="kal-tag">.44 Magnum</span><span class="kal-tag">.41 Magnum</span><span class="kal-tag">.357 Magnum</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2116</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Präzisionsgewehr KK Light Varmint (PG KK LV) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-BDS-ZF-Scheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend aufgelegt</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">4,762 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Beliebig</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB. Max. 4,762 kg. Beliebige Optik. Vorderschaft max. 76 mm breit, Unterseite flach/konvex (Z18-Scheibe).</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z18&#39;)">${scheibeMiniSVG(zid)} BDS-PG-Scheibe (Z18)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">2117</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Präzisionsgewehr KK Heavy Varmint (PG KK HV) 50 m</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-BDS-ZF-Scheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend aufgelegt</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">9,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Beliebig</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber .22 lfB. Max. 9,0 kg. Beliebige Optik. Vorderschaft max. 76 mm breit, Unterseite flach/konvex (Z18-Scheibe).</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z18&#39;)">${scheibeMiniSVG(zid)} BDS-PG-Scheibe (Z18)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Kleinkaliber)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">3117</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">ZF-Gewehr Ordonanzkaliber 100 m (→ 50 m)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-BDS-ZF-Scheibe</span>
+        <span class="warn-tag">⚠ nur Vereinsebene · verk. Scheibe</span>
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend aufgelegt</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">6,0 kg (m. Zb. 6,5 kg)</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber .303, .308, 30-06, 8×57, 7,62×54R. ZF max. 12×. Auf 50 m nur Vereinsebene.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z2&#39;)">${scheibeMiniSVG(zid)} BDS-50m-ZF-Scheibe (Z2)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.308 Win / 7,62×51</span><span class="kal-tag">30-06 Springfield</span><span class="kal-tag">.303 British</span><span class="kal-tag">8×57 IS / 8 mm Mauser</span><span class="kal-tag">7,62×54R</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">3118</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">ZF-Gewehr bis 7 mm 100 m (→ 50 m)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">50-m-BDS-ZF-Scheibe</span>
+        <span class="warn-tag">⚠ nur Vereinsebene · verk. Scheibe</span>
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend aufgelegt</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">6,0 kg (m. Zb. 6,5 kg)</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Handelsüblich</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber 5,45–7 mm (z.B. .223, .243, 6,5 Cr, 7×64). ZF max. 12×. Auf 50 m nur Vereinsebene.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z2&#39;)">${scheibeMiniSVG(zid)} BDS-50m-ZF-Scheibe (Z2)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.223 Rem / 5,56×45</span><span class="kal-tag">.243 Win</span><span class="kal-tag">6,5 Creedmoor</span><span class="kal-tag">6,5×55 SE</span><span class="kal-tag">7×57 / 7 mm Mauser</span><span class="kal-tag">7×64</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">3101</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Matchsportgewehr (MSG) 100 m (→ 50 m)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">Maßst. verk. 100-m-BDS-Scheibe</span>
+        <span class="warn-tag">⚠ nur Vereinsebene · verk. Scheibe</span>
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">8,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">ISSF-Freigewehr</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Schießriemen</div></div>
+      </div>
+      <div class="note">Kaliber 5,45–8 mm. Diopter max. 1,5×. Auf 50 m nur Vereinsebene.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z3&#39;)">${scheibeMiniSVG(zid)} ISSF-50m-Scheibe (Z3)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.308 Win / 7,62×51</span><span class="kal-tag">30-06 Springfield</span><span class="kal-tag">.303 British</span><span class="kal-tag">8×57 IS / 8 mm Mauser</span><span class="kal-tag">7,62×54R</span><span class="kal-tag">.223 Rem / 5,56×45</span><span class="kal-tag">.243 Win</span><span class="kal-tag">6,5 Creedmoor</span><span class="kal-tag">6,5×55 SE</span><span class="kal-tag">7×57 / 7 mm Mauser</span><span class="kal-tag">7×64</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">3105</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Lever Action (LA) 100 m (→ 50 m)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">Maßst. verk. 100-m-ISSF-Scheibe</span>
+        <span class="warn-tag">⚠ nur Vereinsebene · verk. Scheibe</span>
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Nein</div></div>
+      </div>
+      <div class="note">Kaliber 6,5–11,63 mm (z.B. .357 Mag, .44 Mag, .45 LC). Offene Visierung, kein Diopter. Auf 50 m nur Vereinsebene.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z17&#39;)">${scheibeMiniSVG(zid)} 50m-Ordonnanzscheibe (Z17)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">6,5 Creedmoor</span><span class="kal-tag">6,5×55 SE</span><span class="kal-tag">7×57 / 7 mm Mauser</span><span class="kal-tag">.44 Magnum</span><span class="kal-tag">.41 Magnum</span><span class="kal-tag">.357 Magnum</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">3106</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Dienstsportgewehr offene Kimme (DSG o.K.) 100 m (→ 50 m)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">Maßst. verk. 100-m-ISSF-Scheibe</span>
+        <span class="warn-tag">⚠ nur Vereinsebene · verk. Scheibe</span>
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Trageriemen</div></div>
+      </div>
+      <div class="note">Militärwaffe bis 31.12.1965 eingeführt, Kaliber 6,5–8 mm. Original-Kimme und -Korn. Auf 50 m nur Vereinsebene.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z17&#39;)">${scheibeMiniSVG(zid)} 50m-Ordonnanzscheibe (Z17)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.308 Win / 7,62×51</span><span class="kal-tag">8×57 IS / 8 mm Mauser</span><span class="kal-tag">6,5 Creedmoor</span><span class="kal-tag">6,5×55 SE</span><span class="kal-tag">7×57 / 7 mm Mauser</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">3107</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Dienstsportgewehr Diopter (DSG gK+D) 100 m (→ 50 m)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">Maßst. verk. 100-m-ISSF-Scheibe</span>
+        <span class="warn-tag">⚠ nur Vereinsebene · verk. Scheibe</span>
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Trageriemen</div></div>
+      </div>
+      <div class="note">Militärwaffe bis 31.12.1965, Kaliber 6,5–8 mm inkl. .308 Win. Geschlossene Kimme oder beliebiger Diopter. Auf 50 m nur Vereinsebene.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z17&#39;)">${scheibeMiniSVG(zid)} 50m-Ordonnanzscheibe (Z17)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.308 Win / 7,62×51</span><span class="kal-tag">8×57 IS / 8 mm Mauser</span><span class="kal-tag">6,5 Creedmoor</span><span class="kal-tag">6,5×55 SE</span><span class="kal-tag">7×57 / 7 mm Mauser</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">3111</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Dienstsportgewehr Zielfernrohr (DSG ZF) 100 m (→ 50 m)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">Maßst. verk. 100-m-BDS-ZF-Scheibe</span>
+        <span class="warn-tag">⚠ nur Vereinsebene · verk. Scheibe</span>
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Trageriemen</div></div>
+      </div>
+      <div class="note">Militärwaffe bis 31.12.1965, Kaliber 6,5–8 mm inkl. .308 Win. ZF max. 12×. Auf 50 m nur Vereinsebene.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z3&#39;)">${scheibeMiniSVG(zid)} ISSF-50m-Scheibe (Z3)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.308 Win / 7,62×51</span><span class="kal-tag">8×57 IS / 8 mm Mauser</span><span class="kal-tag">6,5 Creedmoor</span><span class="kal-tag">6,5×55 SE</span><span class="kal-tag">7×57 / 7 mm Mauser</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">3103</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Präzisionssportgewehr (PSG) 100 m (→ 50 m)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">Maßst. verk. 100-m-BDS-ZF-Scheibe</span>
+        <span class="warn-tag">⚠ nur Vereinsebene · verk. Scheibe</span>
+      </div>
+      <div class="prop-row"><span class="prop prop-beliebig">Visierung beliebig</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">9,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">ISSF-Freigewehr</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Schießriemen</div></div>
+      </div>
+      <div class="note">Kaliber 5,45–8 mm. Beliebige Visierung. Auf 50 m nur Vereinsebene.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z3&#39;)">${scheibeMiniSVG(zid)} ISSF-50m-Scheibe (Z3)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.308 Win / 7,62×51</span><span class="kal-tag">30-06 Springfield</span><span class="kal-tag">.303 British</span><span class="kal-tag">8×57 IS / 8 mm Mauser</span><span class="kal-tag">7,62×54R</span><span class="kal-tag">.223 Rem / 5,56×45</span><span class="kal-tag">.243 Win</span><span class="kal-tag">6,5 Creedmoor</span><span class="kal-tag">6,5×55 SE</span><span class="kal-tag">7×57 / 7 mm Mauser</span><span class="kal-tag">7×64</span><span class="kal-tag">.300 Win Mag</span><span class="kal-tag">7,62×39</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">3104</span><span class="art-badge lw50">Langwaffe 50 m</span>
+        <span class="dname">Jagdgewehr (JG) 100 m (→ 50 m)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">Maßst. verk. 100-m-BDS-ZF-Scheibe</span>
+        <span class="warn-tag">⚠ nur Vereinsebene · verk. Scheibe</span>
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Liegend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">5,0 kg</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">Kein Lochschaft</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">Trageriemen</div></div>
+      </div>
+      <div class="note">Serienmäßige Jagdwaffe. Kaliber 5,45–9,3 mm. ZF max. 12×. Keine Mündungsbremse. Auf 50 m nur Vereinsebene.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z3&#39;)">${scheibeMiniSVG(zid)} ISSF-50m-Scheibe (Z3)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.308 Win / 7,62×51</span><span class="kal-tag">30-06 Springfield</span><span class="kal-tag">.303 British</span><span class="kal-tag">8×57 IS / 8 mm Mauser</span><span class="kal-tag">7,62×54R</span><span class="kal-tag">.223 Rem / 5,56×45</span><span class="kal-tag">.243 Win</span><span class="kal-tag">6,5 Creedmoor</span><span class="kal-tag">6,5×55 SE</span><span class="kal-tag">7×57 / 7 mm Mauser</span><span class="kal-tag">7×64</span><span class="kal-tag">.300 Win Mag</span><span class="kal-tag">7,62×39</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1001</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">Pistole bis 9 mm</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">1.300 g</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1001 (Präzision) – Kombi: 1101. Mindestimpuls 125 (9 mm) / 112,5 (unter 9 mm). Kaliber z.B. 9 mm Para, 7,65 Br., .357 SIG.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">9 mm</span><span class="kal-tag">.357 SIG</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1002</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">Pistole über 9 mm</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">1.400 g</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1002 (Präzision) – Kombi: 1102. Mindestimpuls 150. Kaliber z.B. .40 S&amp;W, 10 mm Auto, .45 ACP, .45 Colt.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.40 S&amp;W</span><span class="kal-tag">.45 ACP</span><span class="kal-tag">.45 Colt (LC)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1003</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">Pistole Magnum (alle)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">2.100 g</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1003 (Präzision) – Kombi: 1103. Mindestimpuls 180 (bis .357) / 250 (über .357).</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.357 Magnum</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1006</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">Revolver bis .38</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">1.400 g</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1006 (Präzision) – Kombi: 1106. Mindestimpuls 112,5. Kaliber z.B. .38 Special.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.38 Special</span><span class="kal-tag">.32 S&amp;W long</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1007</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">Revolver über .38</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">1.500 g</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1007 (Präzision) – Kombi: 1107. Mindestimpuls 150.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1008</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">Revolver Magnum bis .357</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">1.600 g</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1008 (Präzision) – Kombi: 1108. Mindestimpuls 180. Kaliber .357 Magnum.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.357 Magnum</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1009</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">Revolver Magnum über .357</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">1.700 g</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1009 (Präzision) – Kombi: 1109. Mindestimpuls 250. Kaliber z.B. .44 Mag, .41 Mag, .454 Casull.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.44 Magnum</span><span class="kal-tag">.41 Magnum</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1010</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">FK Pist./Rev. .22/5,6 mm – offene Visierung</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">1.400 g</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1010 (Präzision) – Kombi: 1110. Kein Mindestimpuls. Formgriffe erlaubt. Keine Optik. Kaliber .22 lfB / .22 WMR.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Pistole/Revolver)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1011</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">FK Pist./Rev. mind. .30/7,62 mm</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-beliebig">Visierung beliebig</span><span class="prop prop-komp-ja">Kompensator erlaubt</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">Beliebig</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1011 (Präzision) – Kombi-Kennziffer: 1111. Mindestimpuls 112,5. Kaliber mind. 9mm/.30 – z.B. 9mm Para, .357 SIG, .40 S&amp;W, .45 ACP. Optik ODER Kompensator ODER Übergewicht – mind. eines davon Pflicht (K.2.07). Formgriffe erlaubt.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">9 mm</span><span class="kal-tag">.357 SIG</span><span class="kal-tag">.40 S&amp;W</span><span class="kal-tag">.45 ACP</span><span class="kal-tag">.45 Colt (LC)</span><span class="kal-tag">.44 Special</span><span class="kal-tag">.44 Magnum</span><span class="kal-tag">.41 Magnum</span><span class="kal-tag">.357 Magnum</span><span class="kal-tag">.38 Special</span><span class="kal-tag">mind. .30/7,62 mm (Kurzwaffe)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1012</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">FK Pist./Rev. .22/5,6 mm – optische Visierung</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-opt">Optisch (ZF / Red Dot)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">Beliebig</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1012 (Präzision) – Kombi: 1112. Kein Mindestimpuls. Optische oder elektronische Visierung Pflicht. Kaliber .22 lfB / .22 WMR.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.22 lfB (Pistole/Revolver)</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1014</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">Dienst-Sportpistole/-revolver (DSP)</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">Original</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1014 (Präzision) – Kombi: 1114. Mind. 7,62 mm. Offen, keine Mikrometervisierung. Griffschalen original. Zugelassene Modelle: Sporthandbuch Anlage 2.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span></div>
+    </div><div class="card">
+      <div class="card-top">
+        <span class="kz">1015</span><span class="art-badge kw">Kurzwaffe 25 m</span>
+        <span class="dname">FK Pist./Rev. .32 S&amp;W long</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">BDS-25-m-Kurzwaffenscheibe</span>
+        
+      </div>
+      <div class="prop-row"><span class="prop prop-offen">Offen (Kimme &amp; Korn)</span><span class="prop prop-komp-nein">Kompensator verboten</span></div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">Stehend freihändig</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">1.400 g</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">–</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">–</div></div>
+      </div>
+      <div class="note">Kennziffer 1015 (Präzision) – Kombi: 1115. Kein Mindestimpuls. Formgriffe erlaubt. Kein Kompensator.</div>
+      <div class="scheiben-row"><span style="font-size:.62rem;font-family:&#39;Courier New&#39;,monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe(&#39;Z9&#39;)">${scheibeMiniSVG(zid)} BDS-Kurzwaffenscheibe (Z9)</button></div>
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span><span class="kal-tag">.32 S&amp;W long</span></div>
+    </div></div>
+
+<footer>
+  Datengrundlage: BDS Sporthandbuch Langwaffe (Teil L) und Kurzwaffe (Teil K), Stand 2025/2026 (BVA-Genehmigung 04.12.2025) sowie BDS Kommentar zum SHB, Stand 02.04.2026.
+  Kompensatoren/Mündungsbremsen nach K.2.08 (Kurzwaffe) und L.2.04 (Langwaffe).<br>
+  Version 1.5.2 (07.06.2026) – Korrektur Scheibendarstellung Z 1 (BDS-100m-Scheibe): Spiegel R.5-10 jetzt korrekt vollständig schwarz ohne Weiß-Kern; Innen-10 weiß und 5 weiße Ringlinien im Spiegel gemäß Sporthandbuch Z 1. Korrektur Z 9 (BDS-Kurzwaffenscheibe): Proportionen R.9/R.10/Innen-10 korrigiert (je 25mm Breite); R.9 breit weiß, R.10 schmal schwarz, Innen-10 weiß gemäß Sporthandbuch Z 9.<br>
+  Version 1.5 (07.06.2026) – Ergänzungen aus Kommentar: 2114 Hinweis Visierungserweiterung ab 2027; 3103/3104 Hinweis Lever-Action-Zulassung ab 2027; 3101 kein DM-Betrieb mehr; 2106/2116 ab 2027 optional.<br>
+  Nur Präzisionsdisziplinen — kein Anspruch auf Vollständigkeit oder Rechtsverbindlichkeit. Im Zweifelfall das aktuelle Sporthandbuch und den Kommentar auf bdsnet.de prüfen.
+</footer>
+
+<div class="modal-overlay" id="scheibe-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <svg class="modal-svg" id="modal-svg" width="260" height="260" viewBox="0 0 260 260"></svg>
+    <div class="modal-note" id="modal-note"></div>
+  </div>
+</div>
+</div>
+
+<script>
+// ── Kaliber ───────────────────────────────────────────────────────────────
+const KALIBER = [
+  {v:"kal_308",   l:".308 Win / 7,62×51",        typen:["lw50_ord","lw50_dsg"]},
+  {v:"kal_3006",  l:"30-06 Springfield",          typen:["lw50_ord"]},
+  {v:"kal_303",   l:".303 British",               typen:["lw50_ord"]},
+  {v:"kal_8x57",  l:"8×57 IS / 8 mm Mauser",     typen:["lw50_ord","lw50_dsg"]},
+  {v:"kal_762x54",l:"7,62×54R",                   typen:["lw50_ord"]},
+  {v:"kal_223",   l:".223 Rem / 5,56×45",         typen:["lw50_bis7"]},
+  {v:"kal_243",   l:".243 Win",                   typen:["lw50_bis7"]},
+  {v:"kal_65creed",l:"6,5 Creedmoor",             typen:["lw50_bis7","lw50_dsg","lw50_la_gk"]},
+  {v:"kal_65x55", l:"6,5×55 SE",                 typen:["lw50_bis7","lw50_dsg","lw50_la_gk"]},
+  {v:"kal_7x57",  l:"7×57 / 7 mm Mauser",        typen:["lw50_bis7","lw50_dsg","lw50_la_gk"]},
+  {v:"kal_7x64",  l:"7×64",                       typen:["lw50_bis7"]},
+  {v:"kal_300wm", l:".300 Win Mag",               typen:["lw50_ue7"]},
+  {v:"kal_762x39",l:"7,62×39",                    typen:["lw50_ue7"]},
+  {v:"kal_22lfb", l:".22 lfB (Kleinkaliber)",     typen:["lw50_kk","lw50_la_kk","lw25_sl_kk_opt","lw25_sl_kk_offen","lw25_la_kk_offen","lw25_la_kk_opt"]},
+  {v:"kal_22wmr", l:".22 WMR / .22 Magnum",      typen:["lw50_fk_wmr"]},
+  {v:"kal_17hmr",  l:".17 HMR",                       typen:["lw50_fk_wmr"]},
+  {v:"kal_9mm",   l:"9 mm",                       typen:["lw25_sl_kw_offen","lw25_sl_kw_opt","lw25_la_kw_offen","lw25_la_kw_opt","lw50_sl_kw","lw50_la_kw","kw_p9","kw_fk30"]},
+  {v:"kal_30carb",l:".30 Carbine",                typen:["lw25_sl_kw_offen","lw25_sl_kw_opt","lw50_sl_kw"]},
+  {v:"kal_357sig",l:".357 SIG",                   typen:["lw25_sl_kw_offen","lw25_sl_kw_opt","lw25_la_kw_offen","lw25_la_kw_opt","lw50_sl_kw","lw50_la_kw","kw_p9","kw_fk30"]},
+  {v:"kal_40sw",  l:".40 S&W",                   typen:["lw25_sl_kw_offen","lw25_sl_kw_opt","lw25_la_kw_offen","lw25_la_kw_opt","lw50_sl_kw","lw50_la_kw","kw_pue9","kw_fk30"]},
+  {v:"kal_45acp", l:".45 ACP",                   typen:["lw25_sl_kw_offen","lw25_sl_kw_opt","lw25_la_kw_offen","lw25_la_kw_opt","lw50_sl_kw","lw50_la_kw","kw_pue9","kw_fk30"]},
+  {v:"kal_45lc",  l:".45 Colt (LC)",             typen:["lw25_la_kw_offen","lw25_la_kw_opt","lw50_la_kw","kw_pue9","kw_fk30"]},
+  {v:"kal_44sp",  l:".44 Special",               typen:["lw25_la_kw_offen","lw25_la_kw_opt","lw50_la_kw","kw_fk30"]},
+  {v:"kal_44mag", l:".44 Magnum",                typen:["lw25_la_kw_offen","lw25_la_kw_opt","lw50_la_kw","lw50_la_gk","kw_rmague357","kw_fk30"]},
+  {v:"kal_41mag", l:".41 Magnum",                typen:["lw25_la_kw_offen","lw25_la_kw_opt","lw50_la_kw","lw50_la_gk","kw_rmague357","kw_fk30"]},
+  {v:"kal_357mag",l:".357 Magnum",               typen:["lw25_sl_kw_offen","lw25_sl_kw_opt","lw25_la_kw_offen","lw25_la_kw_opt","lw50_la_kw","lw50_la_gk","kw_rmag357","kw_pmag357","kw_fk30"]},
+  {v:"kal_38sp",  l:".38 Special",               typen:["kw_r38","kw_fk30"]},
+  {v:"kal_32sw",  l:".32 S&W long",              typen:["kw_r38","kw_fk22_32"]},
+  {v:"kal_22pist",l:".22 lfB (Pistole/Revolver)",typen:["kw_fk22_offen","kw_fk22_opt"]},
+  {v:"kal_kw_30p",l:"mind. .30/7,62 mm (Kurzwaffe)", typen:["kw_fk30"]},
+];
+
+
+const SCHEIBEN = {
+  // Z1: BDS-100m-Scheibe – 395x395mm, Innen-10=17mm, Ring=17mm, Spiegel(5-10)=204mm
+  // Ringe 1-10 schwarz, Spiegel schwarz, Ringe 9-10 im Spiegel weiß
+  Z1:{name:"BDS-100m-Scheibe",nr:"Z1",format:"395×395 mm",distanz:"50 m / 100 m",
+    note:"Spiegel (R.5-10) = 204 mm. Ringe 5-10 schwarz, Ringe 1-4 weiß. Mit Einsteckschlitzen für Spiegel.",
+    draw:(svg,s)=>{
+      const cx=s/2,cy=s/2;
+      svg.innerHTML="";
+      rect(svg,0,0,s,s,"#f0ede8");
+      // Ringbreite: Innen-10=17mm, je Ring 17mm → Spiegel (R.5-10) = 6×17mm = 102mm Radius = 204mm Durchmesser
+      // Außenkante R.1 = 102 + 4×17 = 170mm Radius (Gesamt-Ø 340mm, Scheibe 395×395mm)
+      const sp=s*0.44; // Spiegel-Radius skaliert (R.5-10)
+      const rw=sp/6;   // 1 Ringbreite (6 Ringe im Spiegel: R5–R10)
+      // Ringlinien R.1-R.4 (weiße Außenringe)
+      for(let i=4;i>=1;i--) circleStroke(svg,cx,cy,sp+i*rw,"#999",0.5);
+      // Spiegel (R.5-10) vollständig schwarz – kein Farbwechsel laut Sporthandbuch Z 1
+      circle(svg,cx,cy,sp,"#1a1a1a");
+      // Innen-10: nur Kreisumriss (kein gefüllter Punkt)
+      circleStroke(svg,cx,cy,rw*0.5,"#fff",0.8);
+      // Ringlinien R.5-R.9 im Spiegel (5 Trennlinien, weiß)
+      for(let i=1;i<=5;i++) circleStroke(svg,cx,cy,rw*i,"#fff",0.5);
+      label(svg,cx,s*0.93,"Z 1 · BDS-100m-Scheibe · 395×395 mm");
+    }},
+
+  // Z2: BDS-50m-ZF-Scheibe – 550x520mm, 5 Symbole, Innen-10=9mm, Spiegel(5-10)=79mm
+  // Ringe 9-10 weiß, 5-8 schwarz, 1-4 weiß
+  Z2:{name:"BDS-50m-ZF-Scheibe",nr:"Z2",format:"550×520 mm",distanz:"50 m",
+    note:"5 Scheibensymbole. Spiegel (R.5-10) = 79 mm. Je max. 2 Schuss pro Symbol (10 Schuss gesamt). R.9-10 weiß, R.5-8 schwarz, R.1-4 weiß.",
+    draw:(svg,s)=>{
+      svg.innerHTML="";
+      rect(svg,0,0,s,s,"#f0ede8");
+      const pos=[[s*.25,s*.28],[s*.75,s*.28],[s*.5,s*.5],[s*.25,s*.72],[s*.75,s*.72]];
+      const r=s*0.19; // Gesamtradius (R.1-Außen)
+      pos.forEach(([x,y])=>{
+        // R.1-4 weiß: nur Ringlinien
+        for(let i=1;i<=4;i++) circleStroke(svg,x,y,r*i/4,"#bbb",0.4);
+        // R.5-8 schwarz
+        // Maße: Spiegel 79mm Ø = 39,5mm Radius → sp; Ringbreite = 6mm
+        // R.9-Außen = sp, R.9-Innen = sp*0.848, R.10-Innen = sp*0.696, Innen-10 = sp*0.228
+        const sp=r*0.47;
+        circle(svg,x,y,sp,"#1a1a1a");
+        // R.9 weiß
+        circle(svg,x,y,sp*0.848,"#fff");
+        // R.10 schwarz
+        circle(svg,x,y,sp*0.696,"#1a1a1a");
+        // Innen-10: weißer Kreis mit schwarzem Punkt in der Mitte
+        circle(svg,x,y,sp*0.228,"#fff");
+        circle(svg,x,y,sp*0.08,"#1a1a1a");
+        // Ringlinie R.9/R.10
+        circleStroke(svg,x,y,sp*0.848,"#ccc",0.3);
+      });
+      label(svg,s/2,s*.95,"Z 2 · BDS-50m-ZF-Scheibe · 550×520 mm · 5 Symbole");
+    }},
+
+  // Z3: ISSF-50m-Scheibe – 340x340mm, Innen-10=5mm, Ring=8mm, Spiegel(4-10)=112,4mm
+  // Komplett schwarzer Spiegel (4-10), Ringe 1-3 weiß
+  Z3:{name:"ISSF-50m-Scheibe",nr:"Z3",format:"340×340 mm",distanz:"50 m",
+    note:"Spiegel (R.4-10) = 112,4 mm. Innen-10 = 5,0 mm. Ringe 1-3 weiß, R.4-10 schwarz.",
+    draw:(svg,s)=>{
+      const cx=s/2,cy=s/2;
+      svg.innerHTML="";
+      rect(svg,0,0,s,s,"#f0ede8");
+      const sp=s*0.44; // Spiegel
+      const rw=s*0.031; // Ringbreite 8mm skaliert
+      // Ringe 1-3 weiß
+      circle(svg,cx,cy,sp+3*rw,"#f0ede8");
+      circleStroke(svg,cx,cy,sp+3*rw,"#bbb",0.5);
+      circleStroke(svg,cx,cy,sp+2*rw,"#bbb",0.5);
+      circleStroke(svg,cx,cy,sp+rw,"#bbb",0.5);
+      // Spiegel R4-10 komplett schwarz
+      circle(svg,cx,cy,sp,"#1a1a1a");
+      // Ringlinien im Spiegel weiß (R.4-R.9 = 6 Trennlinien)
+      for(let i=1;i<=6;i++) circleStroke(svg,cx,cy,sp/7*i,"#fff",0.4);
+      // Innen-10: nur Kreisumriss (kein gefüllter Punkt)
+      circleStroke(svg,cx,cy,s*0.02,"#fff",0.8);
+      label(svg,cx,s*.93,"Z 3 · ISSF-50m-Scheibe · 340×340 mm");
+    }},
+
+  // Z4: BDS-100m-ZF-Scheibe – 210x297mm (A4), Innen-10=13,5mm, Ring=8,5mm, Spiegel(5-10)=112mm
+  // R9-10 weiß, R5-8 schwarz, R1-4 weiß
+  Z4:{name:"BDS-100m-ZF-Scheibe",nr:"Z4",format:"210×297 mm (A4)",distanz:"100 m",
+    note:"Spiegel (R.5-10) = 112 mm. R.9-10 weiß, R.5-8 schwarz, R.1-4 weiß. Hochformat A4.",
+    draw:(svg,s)=>{
+      const cx=s/2,cy=s*.48;
+      svg.innerHTML="";
+      rect(svg,0,0,s,s,"#f0ede8");
+      rect(svg,s*.18,s*.04,s*.64,s*.9,"#fff",0.5,"#ccc");
+      // Alle Radien aus PDF-Maßen (Ringbreite=8,5mm, Spiegel=56mm Radius, Gesamtradius=90mm)
+      // Skalierung: Gesamtradius = s*0.38
+      const R=s*0.38;
+      const rw=R*(8.5/90); // = R*0.0944
+      const r5=R*(56/90);  // Spiegel-Außen = R*0.622
+      const r9i=R*(47.5/90); // R.9-Innen = R*0.528
+      const r10i=R*(39/90);  // R.10-Innen = R*0.433
+      const ri10=R*(6.75/90); // Innen-10 = R*0.075
+      // R.1-4 weiß: Ringlinien von außen nach innen
+      circleStroke(svg,cx,cy,R,"#bbb",0.4);
+      circleStroke(svg,cx,cy,R-rw,"#bbb",0.4);
+      circleStroke(svg,cx,cy,R-2*rw,"#bbb",0.4);
+      circleStroke(svg,cx,cy,R-3*rw,"#bbb",0.4);
+      // R.5-8 schwarz
+      circle(svg,cx,cy,r5,"#1a1a1a");
+      // Ringlinien R.6, R.7, R.8 (weiß im schwarzen Bereich)
+      circleStroke(svg,cx,cy,r5-rw,"#fff",0.4);
+      circleStroke(svg,cx,cy,r5-2*rw,"#fff",0.4);
+      circleStroke(svg,cx,cy,r5-3*rw,"#fff",0.4);
+      // R.9 weiß
+      circle(svg,cx,cy,r9i,"#fff");
+      // R.10 schwarz
+      circle(svg,cx,cy,r10i,"#1a1a1a");
+      // Innen-10 weiß
+      circle(svg,cx,cy,ri10,"#fff");
+      label(svg,s/2,s*.96,"Z 4 · BDS-100m-ZF-Scheibe · A4");
+    }},
+
+  // Z5: ISSF-100m-Scheibe – 550x550mm, Innen-10=25mm, Ring=25mm, Spiegel(7-10)=200mm
+  // Spiegel (R7-10) komplett schwarz, Ringe 1-6 weiß
+  Z5:{name:"ISSF-100m-Scheibe",nr:"Z5",format:"550×550 mm",distanz:"100 m",
+    note:"Spiegel (R.7-10) = 200 mm. Innen-10 = 25 mm. Ringe 1-6 weiß, R.7-10 schwarz.",
+    draw:(svg,s)=>{
+      const cx=s/2,cy=s/2;
+      svg.innerHTML="";
+      rect(svg,0,0,s,s,"#f0ede8");
+      const sp=s*0.40;
+      const rw=s*0.05;
+      // Ringe 1-6 weiß
+      for(let i=6;i>=1;i--) circleStroke(svg,cx,cy,sp+i*rw,"#bbb",0.4);
+      // Spiegel R7-10 schwarz
+      circle(svg,cx,cy,sp,"#1a1a1a");
+      // Innen-10: nur Kreisumriss (kein gefüllter Punkt)
+      circleStroke(svg,cx,cy,s*0.05,"#fff",0.8);
+      // Ringlinien im Spiegel
+      for(let i=1;i<=3;i++) circleStroke(svg,cx,cy,sp/4*i,"#fff",0.4);
+      label(svg,cx,s*.93,"Z 5 · ISSF-100m-Scheibe · 550×550 mm");
+    }},
+
+  // Z9: BDS-Kurzwaffenscheibe – 550x550mm, je Ring 25mm, Spiegel(7-10)=200mm
+  // R.7-8 schwarz (2 Ringe=50mm), R.9 weiß (25mm), R.10 schwarz (25mm), Innen-10 Kreisumriss
+  Z9:{name:"BDS-Kurzwaffenscheibe",nr:"Z9",format:"550×550 mm",distanz:"25 m",
+    note:"Spiegel (R.7-10) = 200 mm. R.7-8 schwarz, R.9 weiß, R.10 schwarz, Innen-10 Kreisumriss. Alle 25m KW Präzisionsdisziplinen (10xx).",
+    draw:(svg,s)=>{
+      const cx=s/2,cy=s/2;
+      svg.innerHTML="";
+      rect(svg,0,0,s,s,"#f0ede8");
+      // je Ring 25mm → sp=100mm Radius; Außenringe R.1-6 je 25mm aber enger gezeichnet
+      const sp=s*0.45;  // Spiegel-Radius größer
+      const rw=s*0.04;  // Außenring-Breite enger
+      // R.1-6 weiß
+      for(let i=1;i<=6;i++) circleStroke(svg,cx,cy,sp+i*rw,"#bbb",0.4);
+      // R.7-8 schwarz (gesamter Spiegel)
+      circle(svg,cx,cy,sp,"#1a1a1a");
+      // Ringlinie R.7/R.8
+      circleStroke(svg,cx,cy,sp*0.75,"#fff",1.2);
+      // R.9 + R.10 weiß (ab sp*0.5)
+      circle(svg,cx,cy,sp*0.5,"#fff");
+      // Innen-10: kleiner Kreisumriss
+      circleStroke(svg,cx,cy,sp*0.15,"#bbb",0.8);
+      label(svg,cx,s*.93,"Z 9 · BDS-Kurzwaffenscheibe · 550×550 mm");
+    }},
+
+  // Z17: 50m-Ordonnanzscheibe – 340x340mm, Spiegel=100mm, R.7-10 je gleiche Breite
+  // R.7-8 schwarz, R.9 weiß, R.10 schwarz, Innen-10 Kreisumriss
+  Z17:{name:"50m-Ordonnanzscheibe",nr:"Z17",format:"340×340 mm",distanz:"50 m",
+    note:"Spiegel = 100 mm. R.7-8 schwarz, R.9 weiß, R.10 schwarz, Innen-10 Kreisumriss. Für 100m-Disziplinen mit ISSF-100m-Scheibe (Z5), auf 50m substituiert durch Z17.",
+    draw:(svg,s)=>{
+      const cx=s/2,cy=s/2;
+      svg.innerHTML="";
+      rect(svg,0,0,s,s,"#f0ede8");
+      // Spiegel (R.7-10) = 100mm Ø = 50mm Radius, je Ring gleich breit → 4 Ringe à 12,5mm
+      const sp=s*0.38; // Spiegel-Radius
+      const rw=s*0.04; // Ringbreite außerhalb (R.1-6)
+      // R.1-6 weiß: 6 Ringlinien
+      for(let i=1;i<=6;i++) circleStroke(svg,cx,cy,sp+i*rw,"#bbb",0.4);
+      // R.7-8 schwarz (gesamter Spiegel zunächst schwarz)
+      circle(svg,cx,cy,sp,"#1a1a1a");
+      // R.9 weiß (je Ring = sp/4)
+      circle(svg,cx,cy,sp*0.75,"#fff");
+      // R.10 schwarz
+      circle(svg,cx,cy,sp*0.5,"#1a1a1a");
+      // Innen-10: Kreisumriss (nicht gefüllt)
+      circleStroke(svg,cx,cy,sp*0.25,"#fff",0.8);
+      // Ringtrennlinie R.9/R.10
+      circleStroke(svg,cx,cy,sp*0.75,"#ccc",0.4);
+      label(svg,cx,s*.93,"Z 17 · 50m-Ordonnanzscheibe · 340×340 mm");
+    }},
+
+  // Z18: BDS-PG-Scheibe – 450x365mm, 30 Wertungsbilder + 6 Probe
+  // Struktur: 1 Spalte Probebilder links, 5×6 Wertungsbilder rechts
+  // Symbol: schwarzer Außenring → weißer Ring → schwarzer Ring → weißer Kern
+  Z18:{name:"BDS-PG-Scheibe",nr:"Z18",format:"450×365 mm",distanz:"50/100 m",
+    note:"6 Probebilder (linke Spalte) + 30 Wertungsbilder (5×6 Raster). Spiegel (R.5-10) = 38,10 mm. R.7-10 weiß, R.5-6 schwarz. Je 1 Schuss pro Bild.",
+    draw:(svg,s)=>{
+      svg.innerHTML="";
+      rect(svg,0,0,s,s,"#fff");
+      const drawSym=(x,y,r)=>{
+        circle(svg,x,y,r,"#1a1a1a");           // äußerer schwarzer Ring
+        circle(svg,x,y,r*0.72,"#fff");          // weißer Zwischenring
+        circle(svg,x,y,r*0.48,"#1a1a1a");       // innerer schwarzer Ring
+        circle(svg,x,y,r*0.24,"#fff");           // weißer Innenbereich
+        circle(svg,x,y,r*0.09,"#1a1a1a");        // Innen-10 schwarz (Abschluss)
+      };
+      const r=s*0.055;
+      const gap=r*2.35;
+      // 6 Probebilder: 1 Spalte links
+      const probeX = s*0.072;
+      for(let i=0;i<6;i++){
+        drawSym(probeX, s*0.10+i*gap, r);
+      }
+      // 30 Wertungsbilder: 5 Spalten × 6 Zeilen
+      const startX = s*0.27;
+      for(let row=0;row<6;row++){
+        for(let col=0;col<5;col++){
+          drawSym(startX+col*gap, s*0.10+row*gap, r);
+        }
+      }
+      label(svg,s/2,s*.985,"Z 18 · BDS-PG-Scheibe · 450×365 mm · 6 Probe + 30 Wertung");
+    }},
+
+  // Z21: BDS-25m-Präzisionsscheibe / Büchse – 550x520mm
+  // 2 Scheibensymbole nebeneinander, je Ring 25mm, Spiegel(7-10)=200mm
+  // R.7-8 schwarz, R.9 weiß, R.10 schwarz, Innen-10 Kreisumriss, R.6 weiß
+  Z21:{name:"BDS-25m-Präzisionsscheibe / Büchse",nr:"Z21",format:"550×520 mm",distanz:"25 m",
+    note:"2 Scheibensymbole. Spiegel (R.7-10) = 200 mm. R.7-8 schwarz, R.9 weiß, R.10 schwarz, Innen-10 Kreisumriss, R.6 weiß. Alle 25m Büchse Präzisionsdisziplinen (20xx).",
+    draw:(svg,s)=>{
+      svg.innerHTML="";
+      rect(svg,0,0,s,s,"#f0ede8");
+      const pos=[[s*0.3,s*0.5],[s*0.7,s*0.5]];
+      const r=s*0.27;
+      pos.forEach(([cx,cy])=>{
+        // R.6 weiß (außen)
+        circle(svg,cx,cy,r,"#f0ede8");
+        circleStroke(svg,cx,cy,r,"#bbb",0.5);
+        // R.7-8 schwarz
+        const sp=r*0.76;
+        circle(svg,cx,cy,sp,"#1a1a1a");
+        // Ringlinie R.7/R.8
+        circleStroke(svg,cx,cy,sp*0.75,"#fff",1.0);
+        // R.9 + R.10 weiß (ab sp*0.5)
+        circle(svg,cx,cy,sp*0.5,"#fff");
+        // Innen-10: kleiner Kreisumriss
+        circleStroke(svg,cx,cy,sp*0.15,"#bbb",0.8);
+      });
+      label(svg,s/2,s*.95,"Z 21 · BDS-25m-Büchsenscheibe · 550×520 mm · 2 Symbole");
+    }},
+};
+
+const KZ_SCHEIBE = {
+  // 25m Kurzwaffe Präzision (10xx) → Z9
+  '1001':'Z9','1002':'Z9','1003':'Z9','1004':'Z9','1006':'Z9','1007':'Z9','1008':'Z9',
+  '1009':'Z9','1010':'Z9','1011':'Z9','1012':'Z9','1014':'Z9','1015':'Z9',
+  // 25m Büchse Präzision (20xx) → Z21 (laut SHB Z Anhang 1, Znr. 2)
+  '2001':'Z21','2002':'Z21','2003':'Z21','2004':'Z21','2010':'Z21',
+  '2011':'Z21','2012':'Z21','2014':'Z21',
+  // 50m Präzision – laut SHB Z Anhang 1
+  '2101':'Z1',  // SG SL KW off. → Z1
+  '2102':'Z2',  // SG SL KK opt. → Z2
+  '2103':'Z1',  // LA KW off.    → Z1
+  '2104':'Z1',  // LA KK off.    → Z1 (RB KK off.)
+  '2105':'Z1',  // DSG oK KK     → Z1
+  '2106':'Z3',  // DSG gK+D KK   → Z3 (ISSF-50m)
+  '2107':'Z3',  // MSG KK        → Z3 (ISSF-50m)
+  '2108':'Z2',  // PSG KK        → Z2
+  '2109':'Z1',  // FK FSG        → Z1
+  '2110':'Z1',  // SG SL KW opt. → Z1
+  '2111':'Z1',  // LA KW opt.    → Z1
+  '2112':'Z1',  // SG SL KK off. → Z1
+  '2113':'Z18', // ZG 50 KK      → Z18
+  '2114':'Z1',  // LA KK opt. (RB KK opt.) → Z1
+  '2115':'Z2',  // ZG 50 KW      → Z2
+  '2116':'Z18', // PG KK LV      → Z18
+  '2117':'Z18', // PG KK HV      → Z18
+  // 100m auf 50m – Scheibe substituiert laut SHB Z Anhang 1 Zeile 64-67:
+  // statt Z1 → Z3 (ISSF-50m), statt Z4 → Z2, statt Z5 → Z17
+  '3101':'Z3',  // MSG 100m → auf 50m statt Z1 → Z3
+  '3102':'Z4',  // PSG 100m (Scheibe Z4 nativ → auf 50m Z2)
+  '3103':'Z1',  // JG bis 6,4mm 100m (Scheibe Z1 nativ)
+  '3104':'Z1',  // JG über 6,4mm 100m (Scheibe Z1 nativ)
+  '3105':'Z17', // LA 100m → auf 50m statt Z5 → Z17
+  '3106':'Z17', // DSG oK 100m → auf 50m statt Z5 → Z17
+  '3107':'Z17', // DSG gK+D 100m → auf 50m statt Z5 → Z17
+  '3111':'Z3',  // DSG ZF 100m → auf 50m statt Z1 → Z3
+  '3117':'Z2',  // ZF-Gewehr >7mm 100m → Z2 (native Regelscheibe)
+  '3118':'Z2',  // ZF-Gewehr <7mm 100m → Z2 (native Regelscheibe)
+};
+
+// SVG-Hilfsfunktionen
+function svgEl(tag,attrs){
+  const el=document.createElementNS("http://www.w3.org/2000/svg",tag);
+  Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));
+  return el;
+}
+function circle(svg,cx,cy,r,fill){
+  const el=svgEl("circle",{cx,cy,r,fill});
+  svg.appendChild(el);
+}
+function circleStroke(svg,cx,cy,r,stroke,sw){
+  const el=svgEl("circle",{cx,cy,r,fill:"none",stroke,
+    "stroke-width":sw||1});
+  svg.appendChild(el);
+}
+function rect(svg,x,y,w,h,fill,sw,stroke){
+  const el=svgEl("rect",{x,y,width:w,height:h,fill:fill||"none"});
+  if(stroke){el.setAttribute("stroke",stroke);el.setAttribute("stroke-width",sw||1);}
+  svg.appendChild(el);
+}
+function label(svg,x,y,t){
+  const el=svgEl("text",{x,y,"text-anchor":"middle","font-size":"8",
+    "font-family":"Courier New","fill":"#5a5955"});
+  el.textContent=t; svg.appendChild(el);
+}
+function openScheibe(zid){
+  const z=SCHEIBEN[zid];
+  if(!z) return;
+  g("modal-title").textContent=z.name+" ("+z.nr+")";
+  g("modal-sub").textContent="Format: "+z.format+" · Distanz: "+z.distanz;
+  g("modal-note").textContent=z.note;
+  const svg=g("modal-svg");
+  svg.setAttribute("viewBox","0 0 260 260");
+  z.draw(svg,260);
+  g("scheibe-modal").classList.add("open");
+}
+function closeModal(){
+  g("scheibe-modal").classList.remove("open");
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+
+function scheibeMiniSVG(zid){
+  const s=28;
+  return `<svg class="scheibe-mini" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" xmlns="http://www.w3.org/2000/svg" style="border-radius:3px;overflow:hidden">${miniSVG(zid,s)}</svg>`;
+}
+
+function miniSVG(zid,s){
+  const h=s/2;
+  const schemes={
+    Z1:`<rect width="${s}" height="${s}" fill="#f0ede8"/>
+        <circle cx="${h}" cy="${h}" r="${s*.46}" fill="#f0ede8" stroke="#bbb" stroke-width="0.5"/>
+        <circle cx="${h}" cy="${h}" r="${s*.44}" fill="#1a1a1a"/>
+        <circle cx="${h}" cy="${h}" r="${s*.27}" fill="#fff"/>
+        <circle cx="${h}" cy="${h}" r="${s*.14}" fill="#1a1a1a"/>
+        <circle cx="${h}" cy="${h}" r="${s*.07}" fill="#fff"/>`,
+    Z2:`<rect width="${s}" height="${s}" fill="#f0ede8"/>
+        <circle cx="${s*.28}" cy="${s*.3}" r="${s*.18}" fill="#f0ede8"/><circle cx="${s*.28}" cy="${s*.3}" r="${s*.11}" fill="#1a1a1a"/><circle cx="${s*.28}" cy="${s*.3}" r="${s*.066}" fill="#fff"/><circle cx="${s*.28}" cy="${s*.3}" r="${s*.033}" fill="#1a1a1a"/>
+        <circle cx="${s*.72}" cy="${s*.3}" r="${s*.18}" fill="#f0ede8"/><circle cx="${s*.72}" cy="${s*.3}" r="${s*.11}" fill="#1a1a1a"/><circle cx="${s*.72}" cy="${s*.3}" r="${s*.066}" fill="#fff"/><circle cx="${s*.72}" cy="${s*.3}" r="${s*.033}" fill="#1a1a1a"/>
+        <circle cx="${h}" cy="${h}" r="${s*.18}" fill="#f0ede8"/><circle cx="${h}" cy="${h}" r="${s*.11}" fill="#1a1a1a"/><circle cx="${h}" cy="${h}" r="${s*.066}" fill="#fff"/><circle cx="${h}" cy="${h}" r="${s*.033}" fill="#1a1a1a"/>
+        <circle cx="${s*.28}" cy="${s*.7}" r="${s*.18}" fill="#f0ede8"/><circle cx="${s*.28}" cy="${s*.7}" r="${s*.11}" fill="#1a1a1a"/><circle cx="${s*.28}" cy="${s*.7}" r="${s*.066}" fill="#fff"/><circle cx="${s*.28}" cy="${s*.7}" r="${s*.033}" fill="#1a1a1a"/>
+        <circle cx="${s*.72}" cy="${s*.7}" r="${s*.18}" fill="#f0ede8"/><circle cx="${s*.72}" cy="${s*.7}" r="${s*.11}" fill="#1a1a1a"/><circle cx="${s*.72}" cy="${s*.7}" r="${s*.066}" fill="#fff"/><circle cx="${s*.72}" cy="${s*.7}" r="${s*.033}" fill="#1a1a1a"/>`,
+    Z3:`<rect width="${s}" height="${s}" fill="#f0ede8"/>
+        <circle cx="${h}" cy="${h}" r="${s*.44}" fill="#1a1a1a"/>
+        <circle cx="${h}" cy="${h}" r="${s*.02}" fill="#fff"/>`,
+    Z4:`<rect width="${s}" height="${s}" fill="#f0ede8"/>
+        <rect x="${s*.22}" y="${s*.04}" width="${s*.56}" height="${s*.9}" fill="#fff" stroke="#ccc" stroke-width="0.5"/>
+        <circle cx="${h}" cy="${h}" r="${s*.33}" fill="#1a1a1a"/>
+        <circle cx="${h}" cy="${h}" r="${s*.2}" fill="#fff"/>
+        <circle cx="${h}" cy="${h}" r="${s*.1}" fill="#1a1a1a"/>
+        <circle cx="${h}" cy="${h}" r="${s*.05}" fill="#fff"/>`,
+    Z5:`<rect width="${s}" height="${s}" fill="#f0ede8"/>
+        <circle cx="${h}" cy="${h}" r="${s*.40}" fill="#1a1a1a"/>
+        <circle cx="${h}" cy="${h}" r="${s*.05}" fill="#fff"/>`,
+    Z9:`<rect width="${s}" height="${s}" fill="#f0ede8"/>
+        <circle cx="${h}" cy="${h}" r="${s*.40}" fill="#1a1a1a"/>
+        <circle cx="${h}" cy="${h}" r="${s*.20}" fill="#fff"/>
+        <circle cx="${h}" cy="${h}" r="${s*.10}" fill="#1a1a1a"/>
+        <circle cx="${h}" cy="${h}" r="${s*.05}" fill="#fff"/>`,
+    Z17:`<rect width="${s}" height="${s}" fill="#f0ede8"/>
+        <circle cx="${h}" cy="${h}" r="${s*.38}" fill="#1a1a1a"/>
+        <circle cx="${h}" cy="${h}" r="${s*.19}" fill="#fff"/>
+        <circle cx="${h}" cy="${h}" r="${s*.10}" fill="#1a1a1a"/>
+        <circle cx="${h}" cy="${h}" r="${s*.05}" fill="#fff"/>`,
+    Z18:`<rect width="${s}" height="${s}" fill="#fff"/>
+        <circle cx="${s*.25}" cy="${s*.33}" r="${s*.11}" fill="#1a1a1a"/><circle cx="${s*.25}" cy="${s*.33}" r="${s*.07}" fill="#fff"/><circle cx="${s*.25}" cy="${s*.33}" r="${s*.04}" fill="#1a1a1a"/><circle cx="${s*.25}" cy="${s*.33}" r="${s*.015}" fill="#fff"/>
+        <circle cx="${s*.5}" cy="${s*.33}" r="${s*.11}" fill="#1a1a1a"/><circle cx="${s*.5}" cy="${s*.33}" r="${s*.07}" fill="#fff"/><circle cx="${s*.5}" cy="${s*.33}" r="${s*.04}" fill="#1a1a1a"/><circle cx="${s*.5}" cy="${s*.33}" r="${s*.015}" fill="#fff"/>
+        <circle cx="${s*.75}" cy="${s*.33}" r="${s*.11}" fill="#1a1a1a"/><circle cx="${s*.75}" cy="${s*.33}" r="${s*.07}" fill="#fff"/><circle cx="${s*.75}" cy="${s*.33}" r="${s*.04}" fill="#1a1a1a"/><circle cx="${s*.75}" cy="${s*.33}" r="${s*.015}" fill="#fff"/>
+        <circle cx="${s*.25}" cy="${s*.67}" r="${s*.11}" fill="#1a1a1a"/><circle cx="${s*.25}" cy="${s*.67}" r="${s*.07}" fill="#fff"/><circle cx="${s*.25}" cy="${s*.67}" r="${s*.04}" fill="#1a1a1a"/><circle cx="${s*.25}" cy="${s*.67}" r="${s*.015}" fill="#fff"/>
+        <circle cx="${s*.5}" cy="${s*.67}" r="${s*.11}" fill="#1a1a1a"/><circle cx="${s*.5}" cy="${s*.67}" r="${s*.07}" fill="#fff"/><circle cx="${s*.5}" cy="${s*.67}" r="${s*.04}" fill="#1a1a1a"/><circle cx="${s*.5}" cy="${s*.67}" r="${s*.015}" fill="#fff"/>
+        <circle cx="${s*.75}" cy="${s*.67}" r="${s*.11}" fill="#1a1a1a"/><circle cx="${s*.75}" cy="${s*.67}" r="${s*.07}" fill="#fff"/><circle cx="${s*.75}" cy="${s*.67}" r="${s*.04}" fill="#1a1a1a"/><circle cx="${s*.75}" cy="${s*.67}" r="${s*.015}" fill="#fff"/>`,
+    Z21:`<rect width="${s}" height="${s}" fill="#f0ede8"/>
+        <circle cx="${s*.3}" cy="${h}" r="${s*.27}" fill="#1a1a1a"/><circle cx="${s*.3}" cy="${h}" r="${s*.135}" fill="#fff"/><circle cx="${s*.3}" cy="${h}" r="${s*.068}" fill="#1a1a1a"/><circle cx="${s*.3}" cy="${h}" r="${s*.034}" fill="#fff"/>
+        <circle cx="${s*.7}" cy="${h}" r="${s*.27}" fill="#1a1a1a"/><circle cx="${s*.7}" cy="${h}" r="${s*.135}" fill="#fff"/><circle cx="${s*.7}" cy="${h}" r="${s*.068}" fill="#1a1a1a"/><circle cx="${s*.7}" cy="${h}" r="${s*.034}" fill="#fff"/>`,
+  };
+  return schemes[zid]||`<rect width="${s}" height="${s}" fill="#888"/>`;
+}
+function scheibeMiniSVG(zid){
+  const s=28;
+  return `<svg class="scheibe-mini" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" xmlns="http://www.w3.org/2000/svg" style="border-radius:3px;overflow:hidden">${miniSVG(zid,s)}</svg>`;
+}
+
+// ── Disziplinen ───────────────────────────────────────────────────────────
+// vis: "offen" | "opt" | "beliebig"
+// komp: true = erlaubt, false = verboten
+const D = [
+  // 25 m Büchse (20xx) ─────────────────────────────────────────────────
+  {k:"2001",art:"lw25",name:"SG Selbstlader KW, offene/geschl. Vis. (SG SL KW off.Vis.)",
+   typen:["lw25_sl_kw_offen"],vis:"beliebig",komp:false,
+   anschlag:"Stehend freihändig",riemen:"Nein",gewicht:"6,0 kg",schaft:"Handelsüblich",
+   scheibe:"BDS-Kurzwaffenscheibe (25 m)",
+   note:"Kaliber: alle Zentralfeuerkurzwaffenpatronen (9 mm, .357 SIG, .40 S&W, .45 ACP …). Offene oder geschlossene Visierung (kein ZF). 2×10 Schuss in 2×5 Min."},
+  {k:"2002",art:"lw25",name:"SG Selbstlader KK, optische Vis. (SG SL KK opt.Vis.)",
+   typen:["lw25_sl_kk_opt"],vis:"opt",komp:false,
+   anschlag:"Stehend freihändig",riemen:"Nein",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"BDS-Kurzwaffenscheibe (25 m)",
+   note:"Kaliber .22 lfB. Beliebige Optik (ZF, Red Dot …)."},
+  {k:"2003",art:"lw25",name:"Lever Action KW, offene Vis. (LA KW off.Vis.)",
+   typen:["lw25_la_kw_offen"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"Nein",gewicht:"5,0 kg",schaft:"Original",
+   scheibe:"BDS-Kurzwaffenscheibe (25 m)",
+   note:"Kaliber: Kurzwaffenpatronen (z.B. .357 Mag, .44 Sp, .45 ACP …). Speedloader unzulässig."},
+  {k:"2004",art:"lw25",name:"Repetierbüchse KK, offene Vis. (RB KK off.Vis.)",
+   typen:["lw25_la_kk_offen"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"Nein",gewicht:"4,0 kg",schaft:"Original",
+   scheibe:"BDS-Kurzwaffenscheibe (25 m)",
+   note:"Kaliber .22 lfB."},
+  {k:"2010",art:"lw25",name:"SG Selbstlader KW, optische Vis. (SG SL KW opt.Vis.)",
+   typen:["lw25_sl_kw_opt"],vis:"opt",komp:false,
+   anschlag:"Stehend freihändig",riemen:"Nein",gewicht:"6,0 kg",schaft:"Handelsüblich",
+   scheibe:"BDS-Kurzwaffenscheibe (25 m)",
+   note:"Kaliber: alle Zentralfeuerkurzwaffenpatronen. Beliebige Optik (ZF, Red Dot …)."},
+  {k:"2011",art:"lw25",name:"Repetierbüchse KW, opt. Vis. (RB KW opt.Vis.)",
+   typen:["lw25_la_kw_opt"],vis:"opt",komp:false,
+   anschlag:"Stehend freihändig",riemen:"Nein",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"BDS-Kurzwaffenscheibe (25 m)",
+   note:"Repetierbüchse (inkl. Lever Action) mit KW-Patrone. Beliebige Optik; Diopter mit Vergrößerung bis 1,5-fach erlaubt. .30 Carbine unzulässig."},
+  {k:"2012",art:"lw25",name:"SG Selbstlader KK, offene/geschl. Vis. (SG SL KK off.Vis.)",
+   typen:["lw25_sl_kk_offen"],vis:"beliebig",komp:false,
+   anschlag:"Stehend freihändig",riemen:"Nein",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"BDS-Kurzwaffenscheibe (25 m)",
+   note:"Kaliber .22 lfB. Offene oder geschlossene Visierung (kein ZF)."},
+  {k:"2014",art:"lw25",name:"Büchse KK, beliebige Vis. (Büchse KK bel.Vis.)",
+   typen:["lw25_la_kk_opt"],vis:"beliebig",komp:false,
+   anschlag:"Stehend freihändig",riemen:"Nein",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"BDS-Kurzwaffenscheibe (25 m)",
+   note:"Kaliber .22 lfB. Beliebige Visierung. Achtung: Waffen, die in Disziplin 2004 zulässig sind, sind hier nicht zugelassen."},
+
+  // 50 m Langwaffe ─────────────────────────────────────────────────────
+  {k:"2101",art:"lw50",name:"SG Selbstlader KW (SG SL KW) 50 m",
+   typen:["lw50_sl_kw"],vis:"beliebig",komp:true,
+   anschlag:"Liegend freihändig",riemen:"Nein",gewicht:"6,0 kg",schaft:"Handelsüblich",
+   scheibe:"100-m-BDS-Scheibe (Regelscheibe 50 m)",
+   note:"Kaliber: alle Zentralfeuerkurzwaffenpatronen. Offene oder geschlossene Visierung (kein ZF). Kompensator bei Präzision erlaubt (L.2.04)."},
+  {k:"2102",art:"lw50",name:"SG Selbstlader KK (SG SL KK) 50 m",
+   typen:["lw50_kk"],vis:"opt",komp:true,
+   anschlag:"Liegend freihändig",riemen:"Nein",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"50-m-BDS-ZF-Scheibe",
+   note:"Kaliber .22 lfB. Kompensator bei Präzision erlaubt."},
+  {k:"2103",art:"lw50",name:"Repetierbüchse KW, offene Vis. (RB KW off.Vis.) 50 m",
+   typen:["lw50_la_kw"],vis:"offen",komp:false,
+   anschlag:"Liegend freihändig",riemen:"Nein",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"100-m-BDS-Scheibe (Regelscheibe 50 m)",
+   note:"Repetierbüchse (inkl. Lever Action) mit KW-Patrone. Offene Visierung. .30 Carbine unzulässig."},
+  {k:"2104",art:"lw50",name:"Repetierbüchse KK, offene Vis. (RB KK off.Vis.) 50 m",
+   typen:["lw50_la_kk"],vis:"offen",komp:false,
+   anschlag:"Liegend freihändig",riemen:"Nein",gewicht:"4,0 kg",schaft:"Original",
+   scheibe:"100-m-BDS-Scheibe (Regelscheibe 50 m)",
+   note:"Kaliber .22 lfB."},
+  {k:"2105",art:"lw50",name:"Dienstsportgewehr KK offene Kimme (DSG KK) 50 m",
+   typen:["lw50_kk"],vis:"offen",komp:false,
+   anschlag:"Liegend freihändig",riemen:"Trageriemen",gewicht:"Original",schaft:"Original",
+   scheibe:"100-m-BDS-Scheibe (Regelscheibe 50 m)",
+   note:"Kaliber .22 lfB. Repetier- oder Selbstladegewehr im Originalzustand, offene Kimme und Korn."},
+  {k:"2106",art:"lw50",name:"Dienstsportgewehr KK Diopter (DSG D KK) 50 m",
+   typen:["lw50_kk"],vis:"offen",komp:false,
+   anschlag:"Liegend freihändig",riemen:"Trageriemen",gewicht:"Original",schaft:"Original",
+   scheibe:"50-m-ISSF-Scheibe",
+   note:"Kaliber .22 lfB. Originalwaffe mit geschlossener Visierung (original) oder beliebigem Diopter. ⚠ Ab Sportjahr 2027 optional (nur noch auf freiwilliger Basis ausgetragen, Kommentar S. 8)."},
+  {k:"2107",art:"lw50",name:"Matchsportgewehr KK (MSG KK) 50 m",
+   typen:["lw50_kk"],vis:"offen",komp:false,
+   anschlag:"Liegend freihändig",riemen:"Schießriemen",gewicht:"8,0 kg",schaft:"ISSF-Freigewehr",
+   scheibe:"50-m-ISSF-Scheibe",
+   note:"Kaliber .22 lfB. Diopter max. 1,5-fache Optik – gilt hier als 'offen' i.S. BDS."},
+  {k:"2108",art:"lw50",name:"Präzisionssportgewehr KK (PSG KK) 50 m",
+   typen:["lw50_kk"],vis:"opt",komp:false,
+   anschlag:"Liegend freihändig",riemen:"Schießriemen",gewicht:"9,0 kg",schaft:"ISSF-Freigewehr",
+   scheibe:"50-m-BDS-ZF-Scheibe",
+   note:"Kaliber .22 lfB. Beliebige Visierung inkl. ZF."},
+  {k:"2109",art:"lw50",name:"Freie Klasse KK (FK KK) 50 m – .22 WMR / .17 HMR",
+   typen:["lw50_fk_wmr"],vis:"opt",komp:false,
+   anschlag:"Liegend freihändig",riemen:"Trageriemen",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"50-m-BDS-ZF-Scheibe",
+   note:"Kaliber NUR .22 WMR oder .17 HMR (nicht .22 lfB). Keine Selbstlader."},
+  {k:"2110",art:"lw50",name:"SG Selbstlader KW, optische Vis. (SG SL KW opt.Vis.) 50 m",
+   typen:["lw50_sl_kw"],vis:"opt",komp:true,
+   anschlag:"Liegend freihändig",riemen:"Nein",gewicht:"6,0 kg",schaft:"Handelsüblich",
+   scheibe:"100-m-BDS-Scheibe (Regelscheibe 50 m)",
+   note:"Kaliber: alle Zentralfeuerkurzwaffenpatronen. Beliebige Optik."},
+  {k:"2111",art:"lw50",name:"Repetierbüchse KW, opt. Vis. (RB KW opt.Vis.) 50 m",
+   typen:["lw50_la_kw"],vis:"opt",komp:false,
+   anschlag:"Liegend freihändig",riemen:"Nein",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"100-m-BDS-Scheibe (Regelscheibe 50 m)",
+   note:"Repetierbüchse (inkl. Lever Action) mit KW-Patrone. Beliebige Optik; Diopter mit Vergrößerung bis 1,5-fach erlaubt. .30 Carbine unzulässig."},
+  {k:"2112",art:"lw50",name:"SG Selbstlader KK, offene/geschl. Vis. (SG SL KK off.Vis.) 50 m",
+   typen:["lw50_kk"],vis:"beliebig",komp:true,
+   anschlag:"Liegend freihändig",riemen:"Nein",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"100-m-BDS-Scheibe (Regelscheibe 50 m)",
+   note:"Kaliber .22 lfB. Offene oder geschlossene Visierung (kein ZF). Kompensator erlaubt."},
+  {k:"2113",art:"lw50",name:"Zielfernrohrgewehr KK (ZG 50 KK) 50 m",
+   typen:["lw50_kk"],vis:"opt",komp:true,
+   anschlag:"Liegend aufgelegt",riemen:"Nein",gewicht:"6,5 kg",schaft:"Handelsüblich",
+   scheibe:"50-m-BDS-ZF-Scheibe",
+   note:"Kaliber .22 lfB. Beliebige Optik, Zweibein erlaubt."},
+  {k:"2114",art:"lw50",name:"Repetierbüchse KK, optische Vis. (RB KK opt.Vis.) 50 m",
+   typen:["lw50_kk","lw50_la_kk"],vis:"opt",komp:false,
+   anschlag:"Liegend freihändig",riemen:"Trageriemen",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"50-m-BDS-ZF-Scheibe",
+   note:"Kaliber .22 lfB. Repetierer (auch Lever Action), optische Visierung. ⚠ Ab Sportjahr 2027 wird die Visierung auf 'beliebig' erweitert (Kommentar S. 8)."},
+  {k:"2115",art:"lw50",name:"Zielfernrohrgewehr KW (ZG 50 KW) 50 m",
+   typen:["lw50_sl_kw","lw50_la_kw"],vis:"opt",komp:true,
+   anschlag:"Liegend aufgelegt",riemen:"Nein",gewicht:"6,5 kg",schaft:"Handelsüblich",
+   scheibe:"50-m-BDS-ZF-Scheibe",
+   note:"Kaliber: alle Kurzwaffenpatronen. Optik bis 12×, Zweibein erlaubt."},
+  {k:"2116",art:"lw50",name:"Präzisionsgewehr KK Light Varmint (PG KK LV) 50 m",
+   typen:["lw50_kk"],vis:"opt",komp:true,
+   anschlag:"Liegend aufgelegt",riemen:"Nein",gewicht:"4,762 kg",schaft:"Beliebig",
+   scheibe:"50-m-BDS-ZF-Scheibe",
+   note:"Kaliber .22 lfB. Max. 4,762 kg. Beliebige Optik. Vorderschaft max. 76 mm breit, Unterseite flach/konvex. ⚠ Ab Sportjahr 2027 optional (Kommentar S. 8)."},
+  {k:"2117",art:"lw50",name:"Präzisionsgewehr KK Heavy Varmint (PG KK HV) 50 m",
+   typen:["lw50_kk"],vis:"opt",komp:true,
+   anschlag:"Liegend aufgelegt",riemen:"Nein",gewicht:"9,0 kg",schaft:"Beliebig",
+   scheibe:"50-m-BDS-ZF-Scheibe",
+   note:"Kaliber .22 lfB. Max. 9,0 kg. Beliebige Optik. Vorderschaft max. 76 mm breit, Unterseite flach/konvex (Z18-Scheibe)."},
+  {k:"3117",art:"lw50",name:"ZF-Gewehr Ordonanzkaliber 100 m (→ 50 m)",
+   typen:["lw50_ord"],vis:"opt",komp:true,warn:true,
+   anschlag:"Liegend aufgelegt",riemen:"Nein",gewicht:"7,5 kg",schaft:"Handelsüblich",
+   scheibe:"50-m-BDS-ZF-Scheibe",
+   note:"Kaliber .303, .308, 30-06, 8×57, 7,62×54R. ZF max. 12×. Zweibein erlaubt. Auf 50 m nur Vereinsebene."},
+  {k:"3118",art:"lw50",name:"ZF-Gewehr bis 7 mm 100 m (→ 50 m)",
+   typen:["lw50_bis7"],vis:"opt",komp:true,warn:true,
+   anschlag:"Liegend aufgelegt",riemen:"Nein",gewicht:"7,5 kg",schaft:"Handelsüblich",
+   scheibe:"50-m-BDS-ZF-Scheibe",
+   note:"Kaliber 5,45–7 mm (z.B. .223, .243, 6,5 Cr, 7×64). ZF max. 12×. Zweibein erlaubt. Auf 50 m nur Vereinsebene."},
+  {k:"3101",art:"lw50",name:"Matchsportgewehr (MSG) 100 m (→ 50 m)",
+   typen:["lw50_bis7","lw50_ord"],vis:"offen",komp:false,warn:true,
+   anschlag:"Liegend freihändig",riemen:"Schießriemen",gewicht:"8,0 kg",schaft:"ISSF-Freigewehr",
+   scheibe:"Maßst. verk. 100-m-BDS-Scheibe",
+   note:"Kaliber 5,45–8 mm. Diopter max. 1,5×. Wird nicht mehr auf Deutschen Meisterschaften ausgetragen (Kommentar S. 7). Auf 50 m nur Vereinsebene."},
+  {k:"3105",art:"lw50",name:"Lever Action (LA) 100 m (→ 50 m)",
+   typen:["lw50_la_gk"],vis:"offen",komp:false,warn:true,
+   anschlag:"Liegend freihändig",riemen:"Nein",gewicht:"5,0 kg",schaft:"Original",
+   scheibe:"Maßst. verk. 100-m-ISSF-Scheibe",
+   note:"Kaliber 6,5–11,63 mm (z.B. .357 Mag, .44 Mag, .45 LC). Offene Visierung, kein Diopter. Auf 50 m nur Vereinsebene."},
+  {k:"3106",art:"lw50",name:"Dienstsportgewehr offene Kimme (DSG o.K.) 100 m (→ 50 m)",
+   typen:["lw50_dsg"],vis:"offen",komp:false,warn:true,
+   anschlag:"Liegend freihändig",riemen:"Trageriemen",gewicht:"Original",schaft:"Original",
+   scheibe:"Maßst. verk. 100-m-ISSF-Scheibe",
+   note:"Militärwaffe bis 31.12.1965 eingeführt, Kaliber 6,5–8 mm. Original-Kimme und -Korn. Auf 50 m nur Vereinsebene."},
+  {k:"3107",art:"lw50",name:"Dienstsportgewehr Diopter (DSG gK+D) 100 m (→ 50 m)",
+   typen:["lw50_dsg"],vis:"offen",komp:false,warn:true,
+   anschlag:"Liegend freihändig",riemen:"Trageriemen",gewicht:"Original",schaft:"Original",
+   scheibe:"Maßst. verk. 100-m-ISSF-Scheibe",
+   note:"Militärwaffe bis 31.12.1965, Kaliber 6,5–8 mm inkl. .308 Win. Geschlossene Kimme oder beliebiger Diopter. Auf 50 m nur Vereinsebene."},
+  {k:"3111",art:"lw50",name:"Dienstsportgewehr Zielfernrohr (DSG ZF) 100 m (→ 50 m)",
+   typen:["lw50_dsg"],vis:"opt",komp:false,warn:true,
+   anschlag:"Liegend freihändig",riemen:"Trageriemen",gewicht:"Original",schaft:"Original",
+   scheibe:"Maßst. verk. 100-m-BDS-ZF-Scheibe",
+   note:"Militärwaffe bis 31.12.1965, Kaliber 6,5–8 mm inkl. .308 Win. ZF max. 12×. Auf 50 m nur Vereinsebene."},
+  {k:"3102",art:"lw50",name:"Präzisionssportgewehr (PSG) 100 m (→ 50 m)",
+   typen:["lw50_bis7","lw50_ue7","lw50_ord"],vis:"beliebig",komp:true,warn:true,
+   anschlag:"Liegend freihändig",riemen:"Schießriemen",gewicht:"9,0 kg",schaft:"ISSF-Freigewehr",
+   scheibe:"Maßst. verk. 100-m-BDS-ZF-Scheibe",
+   note:"Kaliber 5,45–8 mm. Beliebige Visierung. Auf 50 m nur Vereinsebene."},
+  {k:"3103",art:"lw50",name:"Jagdgewehr bis 6,4 mm (JG bis 6,4) 100 m (→ 50 m)",
+   typen:["lw50_bis7"],vis:"opt",komp:false,warn:true,
+   anschlag:"Stehend angestrichen",riemen:"Nein",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"Maßst. verk. 100-m-BDS-Scheibe",
+   note:"Serienmäßige Jagdwaffe. Kaliber 5,2–6,4 mm (z.B. .204, .222, .223, .243). ZF max. 12×. Keine Mündungsbremse. ⚠ Ab Sportjahr 2027 sind UHR (Lever Action) in dieser Disziplin zugelassen (Kommentar S. 8). Auf 50 m nur Vereinsebene."},
+  {k:"3104",art:"lw50",name:"Jagdgewehr über 6,4 mm (JG über 6,4) 100 m (→ 50 m)",
+   typen:["lw50_bis7","lw50_ue7","lw50_ord"],vis:"opt",komp:false,warn:true,
+   anschlag:"Stehend angestrichen",riemen:"Nein",gewicht:"5,0 kg",schaft:"Handelsüblich",
+   scheibe:"Maßst. verk. 100-m-BDS-Scheibe",
+   note:"Serienmäßige Jagdwaffe. Kaliber 6,5–9,3 mm (z.B. .308, 30-06, 6,5×55, 8×57). ZF max. 12×. Keine Mündungsbremse. ⚠ Ab Sportjahr 2027 sind UHR (Lever Action) in dieser Disziplin zugelassen (Kommentar S. 8). Auf 50 m nur Vereinsebene."},
+
+  // Kurzwaffe 25 m – Standarddisziplinen ──────────────────────────────
+  {k:"1001",art:"kw",name:"Pistole bis 9 mm",
+   typen:["kw_p9"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"1.400 g",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1001 (Präzision) – Kombi: 1101. Mindestimpuls 125 (9 mm) / 112,5 (unter 9 mm). Kaliber z.B. 9 mm Para, 7,65 Br., .357 SIG."},
+  {k:"1002",art:"kw",name:"Pistole über 9 mm",
+   typen:["kw_pue9"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"1.400 g",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1002 (Präzision) – Kombi: 1102. Mindestimpuls 150. Kaliber z.B. .40 S&W, 10 mm Auto, .45 ACP, .45 Colt."},
+  {k:"1003",art:"kw",name:"Pistole Magnum bis .357",
+   typen:["kw_pmag357"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"2.100 g",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1003 (Präzision) – Kombi: 1103. Mindestimpuls 180. Kaliber bis .357 Magnum."},
+  {k:"1004",art:"kw",name:"Pistole Magnum über .357",
+   typen:["kw_pmague357"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"2.100 g",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1004 (Präzision) – Kombi: 1104. Mindestimpuls 250. Kaliber über .357 Magnum (z.B. .44 Mag, .41 Mag)."},
+  {k:"1006",art:"kw",name:"Revolver bis .38",
+   typen:["kw_r38"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"1.400 g",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1006 (Präzision) – Kombi: 1106. Mindestimpuls 112,5. Kaliber z.B. .38 Special."},
+  {k:"1007",art:"kw",name:"Revolver über .38",
+   typen:["kw_rue38"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"1.500 g",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1007 (Präzision) – Kombi: 1107. Mindestimpuls 150."},
+  {k:"1008",art:"kw",name:"Revolver Magnum bis .357",
+   typen:["kw_rmag357"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"1.600 g",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1008 (Präzision) – Kombi: 1108. Mindestimpuls 180. Kaliber .357 Magnum."},
+  {k:"1009",art:"kw",name:"Revolver Magnum über .357",
+   typen:["kw_rmague357"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"1.700 g",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1009 (Präzision) – Kombi: 1109. Mindestimpuls 250. Kaliber z.B. .44 Mag, .41 Mag, .454 Casull."},
+  // Kurzwaffe – Freie Klassen ──────────────────────────────────────────
+  {k:"1010",art:"kw",name:"FK Pist./Rev. .22/5,6 mm – offene Visierung",
+   typen:["kw_fk22_offen"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"1.400 g",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1010 (Präzision) – Kombi: 1110. Kein Mindestimpuls. Formgriffe erlaubt. Keine Optik. Kaliber .22 lfB / .22 WMR."},
+  {k:"1011",art:"kw",name:"FK Pist./Rev. mind. .30/7,62 mm",
+   typen:["kw_fk30"],vis:"beliebig",komp:true,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"Beliebig",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1011 (Präzision) – Kombi-Kennziffer: 1111. Mindestimpuls 112,5. Kaliber mind. 9mm/.30 – z.B. 9mm Para, .357 SIG, .40 S&W, .45 ACP. Optik ODER Kompensator ODER Übergewicht – mind. eines davon Pflicht (K.2.07). Formgriffe erlaubt."},
+  {k:"1012",art:"kw",name:"FK Pist./Rev. .22/5,6 mm – optische Visierung",
+   typen:["kw_fk22_opt"],vis:"opt",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"Beliebig",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1012 (Präzision) – Kombi: 1112. Kein Mindestimpuls. Optische oder elektronische Visierung Pflicht. Kaliber .22 lfB / .22 WMR."},
+  {k:"1014",art:"kw",name:"Dienst-Sportpistole/-revolver (DSP)",
+   typen:["kw_dsp"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"Original",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1014 (Präzision) – Kombi: 1114. Mind. 7,62 mm. Offen, keine Mikrometervisierung. Griffschalen original. Zugelassene Modelle: Sporthandbuch Anlage 2."},
+  {k:"1015",art:"kw",name:"FK Pist./Rev. .32 S&W long",
+   typen:["kw_fk22_32"],vis:"offen",komp:false,
+   anschlag:"Stehend freihändig",riemen:"–",gewicht:"1.400 g",schaft:"–",
+   scheibe:"BDS-25-m-Kurzwaffenscheibe",
+   note:"Kennziffer 1015 (Präzision) – Kombi: 1115. Kein Mindestimpuls. Formgriffe erlaubt. Kein Kompensator."},
+];
+
+// ── Typen-Definitionen ───────────────────────────────────────────────────
+const ART_GROUPS = {
+  lw25:{label:"Büchse 25 m",typen:["lw25_sl_kw_offen","lw25_sl_kw_opt","lw25_sl_kk_opt","lw25_sl_kk_offen","lw25_la_kw_offen","lw25_la_kw_opt","lw25_la_kk_offen","lw25_la_kk_opt"]},
+  lw50:{label:"Langwaffe 50 m",typen:["lw50_ord","lw50_kk","lw50_bis7","lw50_ue7","lw50_sl_kw","lw50_la_kw","lw50_la_kk","lw50_la_gk","lw50_dsg"]},
+  kw:  {label:"Kurzwaffe 25 m",typen:["kw_p9","kw_pue9","kw_pmag357","kw_pmague357","kw_r38","kw_rue38","kw_rmag357","kw_rmague357","kw_fk22_offen","kw_fk22_opt","kw_fk22_32","kw_fk30","kw_dsp"]},
+};
+const TYP_LABELS={
+  lw25_sl_kw_offen:"SG SL KW – offen",lw25_sl_kw_opt:"SG SL KW – optisch",
+  lw25_sl_kk_opt:"SG SL KK – optisch",lw25_sl_kk_offen:"SG SL KK – offen",
+  lw25_la_kw_offen:"LA KW – offen",lw25_la_kw_opt:"LA KW – optisch",
+  lw25_la_kk_offen:"LA KK – offen",lw25_la_kk_opt:"LA KK – optisch",
+  lw50_ord:".308/.303/30-06/8×57/7,62×54",lw50_kk:"KK .22 lfB",
+  lw50_bis7:"GK bis 7 mm",lw50_ue7:"GK über 7 mm",
+  lw50_sl_kw:"SG SL KW 50 m",lw50_la_kw:"LA KW 50 m",lw50_la_kk:"LA KK 50 m",
+  lw50_la_gk:"Lever Action GK (6,5–11,63 mm)",lw50_dsg:"Dienstsportgewehr (DSG)",lw50_fk_wmr:"FK KK – nur .22 WMR / .17 HMR",
+  kw_p9:"Pistole bis 9 mm",kw_pue9:"Pistole über 9 mm",
+  kw_pmag357:"Pistole Mag. bis .357",kw_pmague357:"Pistole Mag. über .357",
+  kw_r38:"Revolver bis .38",kw_rue38:"Revolver über .38",
+  kw_rmag357:"Revolver Mag. bis .357",kw_rmague357:"Revolver Mag. über .357",
+  kw_fk22_offen:"FK .22 – offen",kw_fk22_opt:"FK .22 – optisch",
+  kw_fk22_32:"FK .32 S&W long",kw_fk30:"FK mind. .30/7,62 mm",kw_dsp:"Dienst-Sportpistole/-revolver",
+};
+const ART_LABELS={
+  lw25:'<span class="art-badge lw25">Büchse 25 m</span>',
+  lw50:'<span class="art-badge lw50">Langwaffe 50 m</span>',
+  kw:  '<span class="art-badge kw">Kurzwaffe 25 m</span>',
+};
+const VIS_TAG={
+  offen:'<span class="prop prop-offen">Offen (Kimme & Korn)</span>',
+  opt:'<span class="prop prop-opt">Optisch (ZF / Red Dot)</span>',
+  beliebig:'<span class="prop prop-beliebig">Visierung beliebig</span>',
+};
+
+function g(id){return document.getElementById(id)}
+function getV(id){return g(id).value}
+
+function buildKalOpts(){
+  const art=getV("s-art");
+  const relTypen=art?ART_GROUPS[art].typen:Object.values(ART_GROUPS).flatMap(x=>x.typen);
+  const sel=g("s-kal"),cur=sel.value;
+  sel.innerHTML='<option value="">Alle Kaliber</option>';
+  KALIBER.forEach(k=>{
+    if(!k.typen.some(t=>relTypen.includes(t)))return;
+    const o=document.createElement("option");
+    o.value=k.v;o.textContent=k.l;if(k.v===cur)o.selected=true;
+    sel.appendChild(o);
+  });
+  if(cur&&!sel.querySelector(`option[value="${cur}"]`))sel.value="";
+  updateKalHint();
+}
+
+function buildTypOpts(){
+  const art=getV("s-art"),kal=getV("s-kal"),vis=getV("s-vis"),komp=getV("s-komp");
+  const kalTypen=kal?KALIBER.find(k=>k.v===kal)?.typen||null:null;
+  const sel=g("s-typ"),cur=sel.value;
+  sel.innerHTML='<option value="">Alle Typen</option>';
+  const groups=art?[art]:["lw25","lw50","kw"];
+  groups.forEach(a=>{
+    const og=document.createElement("optgroup");og.label=ART_GROUPS[a].label;
+    ART_GROUPS[a].typen.forEach(t=>{
+      if(kalTypen&&!kalTypen.includes(t))return;
+      // Prüfen ob mindestens eine Disziplin mit diesem Typ die vis/komp-Filter erfüllt
+      const hasMatch=D.some(d=>d.typen.includes(t)&&
+        (!vis||d.vis===vis||d.vis==="beliebig")&&
+        (komp===""||( komp==="ja"&&d.komp)));
+      if(!hasMatch)return;
+      const o=document.createElement("option");
+      o.value=t;o.textContent=TYP_LABELS[t]||t;if(t===cur)o.selected=true;
+      og.appendChild(o);
+    });
+    if(og.children.length)sel.appendChild(og);
+  });
+  if(cur&&!sel.querySelector(`option[value="${cur}"]`))sel.value="";
+}
+
+function updateKalHint(){
+  const kal=getV("s-kal"),hint=g("kal-hint");
+  if(!kal){hint.textContent="";return;}
+  const k=KALIBER.find(x=>x.v===kal);
+  if(!k){hint.textContent="";return;}
+  const n=D.filter(d=>k.typen.some(t=>d.typen.includes(t))).length;
+  hint.textContent=n+" mögliche Disziplin(en)";
+}
+
+function render(){
+  const art=getV("s-art"),kal=getV("s-kal"),vis=getV("s-vis"),komp=getV("s-komp"),typ=getV("s-typ");
+  const kalTypen=kal?KALIBER.find(k=>k.v===kal)?.typen||[]:null;
+  const f=D.filter(d=>{
+    if(art&&d.art!==art)return false;
+    if(kalTypen&&!d.typen.some(t=>kalTypen.includes(t)))return false;
+    if(vis&&d.vis!==vis&&d.vis!=="beliebig")return false;
+    if(komp==="ja"&&!d.komp)return false;
+    if(typ&&!d.typen.includes(typ))return false;
+    return true;
+  });
+  g("cnt").textContent=f.length+" Disziplin"+(f.length===1?"":"en")+" gefunden";
+  const res=g("res");
+  if(!f.length){res.innerHTML='<p class="empty">Keine Disziplin gefunden – Filter anpassen.</p>';return;}
+  res.innerHTML=f.map(d=>{
+    const kompTag=d.komp
+      ?'<span class="prop prop-komp-ja">Kompensator erlaubt</span>'
+      :'<span class="prop prop-komp-nein">Kompensator verboten</span>';
+    const kalTags=KALIBER.filter(k=>k.typen.some(t=>d.typen.includes(t)))
+      .map(k=>`<span class="kal-tag">${k.l}</span>`).join("");
+    return `<div class="card">
+      <div class="card-top">
+        <span class="kz">${d.k}</span>${ART_LABELS[d.art]}
+        <span class="dname">${d.name}</span>
+      </div>
+      <div class="scheibe-row">
+        <span class="scheibe-tag">${d.scheibe}</span>
+        ${d.warn?'<span class="warn-tag">⚠ nur Vereinsebene · verk. Scheibe</span>':''}
+      </div>
+      <div class="prop-row">${VIS_TAG[d.vis]}${kompTag}</div>
+      <div class="grid">
+        <div class="di"><div class="dl">Anschlag</div><div class="dv">${d.anschlag}</div></div>
+        <div class="di"><div class="dl">Gewicht max.</div><div class="dv">${d.gewicht}</div></div>
+        <div class="di"><div class="dl">Schaft</div><div class="dv">${d.schaft}</div></div>
+        <div class="di"><div class="dl">Riemen</div><div class="dv">${d.riemen}</div></div>
+      </div>
+      ${d.note?`<div class="note">${d.note}</div>`:''}
+      ${(()=>{const zid=KZ_SCHEIBE[d.k];if(!zid)return '';const z=SCHEIBEN[zid];return `<div class="scheiben-row"><span style="font-size:.62rem;font-family:'Courier New',monospace;color:var(--text3);align-self:center;margin-right:4px">Scheibe:</span><button class="scheibe-btn" onclick="openScheibe('${zid}')">${"${scheibeMiniSVG(zid)}"} ${z.name} (${zid})</button></div>`;})()}
+      <div class="kaliber-tags"><span class="kal-label">Kaliber:</span>${kalTags}</div>
+    </div>`;
+  }).join('');
+}
+
+function onFilterChange(){buildTypOpts();updateKalHint();render();}
+document.getElementById("s-art").addEventListener("change",()=>{buildKalOpts();buildTypOpts();updateKalHint();render();});
+["s-vis","s-komp"].forEach(id=>g(id).addEventListener("change",onFilterChange));
+g("s-kal").addEventListener("change",()=>{buildTypOpts();updateKalHint();render();});
+g("s-typ").addEventListener("change",render);
+buildKalOpts();buildTypOpts();render();
+</script>
+
+
+</body></html>
